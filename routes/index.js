@@ -38,7 +38,7 @@ router.get('/exec-test', function(req, res, next){
     child_proc.exec(cmd_file, options, exec_callback);
 });
 
-router.get('/dir-test', function(req, res, next){
+router.get('/exec-dir', function(req, res, next){
     var child_proc = require('child_process');
     var file_name = 'dir';
     var exec_callback = function(err, stdout, stderr){
@@ -61,6 +61,51 @@ router.get('/dir-test', function(req, res, next){
         timeout: 0,
         killSignal: 'SIGTERM',
         cwd: "C:/Users/Administrator/Documents/GitHub/data-compare-sol/data-compare-sol/x64/Debug",
+        env: process.env
+    });
+});
+/*
+* praat execute test
+*
+*
+* */
+router.get('/exec-praat', function(req, res){
+    var childProcess = require('child_process');
+
+    //praat command path
+    //praat.exe file should download to project home directory
+    var praatCommand = path.join(__dirname, "..") + "/praat ";
+    var praatMacCommand = " Applications/Praat.app/Contents/MacOS/Praat ";
+
+    //c:\Users\Administrator\Desktop\capstone\attend-speaker
+    var praat_dir = path.join(__dirname, '..');
+
+    //script for praat script function
+    var scriptToRun = "file-write.praat";
+    //sound file working directory
+    var workingDir = "./sound-data";
+    //sound file
+    var wavFile = "test1.wav";
+    //script params
+    var scriptParameters = "-20 4 0.4 0.1 no \"" + workingDir + "\"   \"" + wavFile + "\"";
+
+    //command
+    var textGridCommand = praatCommand + __dirname + "/../praat-script/" + scriptToRun + "  " + scriptParameters; //+ " 2>&1 ";
+
+    childProcess.exec(textGridCommand , function(error, stdout, stderr) {
+        if(error){
+            console.log('error occurred, ', error);
+            res.send('error');
+        } else {
+            console.log('std: ', stdout, stderr);
+            console.log("Script execution is complete, here are the results: " + stdout);
+            res.send('success');
+        }
+    }, {
+        encoding: 'utf8',
+        timeout: 0,
+        killSignal: 'SIGTERM',
+        cwd: praat_dir,
         env: process.env
     });
 });

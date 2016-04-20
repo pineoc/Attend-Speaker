@@ -19,3 +19,7 @@ pip-log.txt
 #node.js dir
 node_modules
 
+#project datas
+Praat.exe
+*.txt
+*.wav
