@@ -11,19 +11,39 @@ form Test command line calls
     	real third_real 0.4
     	real fourth_real 0.1
     	sentence bool_text no
-    	sentence datadir_text ./sound-data
+    	sentence datadir_text c:\Users\Administrator\Desktop\capstone\attend-speaker\sound-data\
 	sentence dataname_text test1.wav
+	sentence outputdata_text test1.out
 endform
 
 #if sentence, add $ to tail to param_name
-#if not sentence, remove 
-writeFileLine: "test1-t", "first real: ", first_int
-appendFileLine: "test1-t", "second real: ", second_real
-appendFileLine: "test1-t", "third real: ", third_real
-appendFileLine: "test1-t", "fourth real: ", fourth_real
-appendFileLine: "test1-t", "book sentence: ", bool_text$
-appendFileLine: "test1-t", "data_dir sentence: ", datadir_text$ + "/" + dataname_text$
-appendFileLine: "test1-t", "data_name sentence: ", dataname_text$
+#if not sentence, remove
+
+
+
+#writeFileLine test
+outputPath$ = "'datadir_text$'" + "'outputdata_text$'"
+writeFileLine: "'outputPath$'", "first real: ", first_int
+appendFileLine: "'outputPath$'", "second real: ", second_real
+appendFileLine: "'outputPath$'", "third real: ", third_real
+appendFileLine: "'outputPath$'", "fourth real: ", fourth_real
+appendFileLine: "'outputPath$'", "book sentence: ", bool_text$
+appendFileLine: "'outputPath$'", "data_dir sentence: ", datadir_text$ + "\" + dataname_text$
+appendFileLine: "'outputPath$'", "data_name sentence: ", dataname_text$
+appendFileLine: "'outputPath$'", newline$
+
+#outLine test
+outLine$ =  "f2" + tab$ + "f3" + tab$ + "duration" + newline$
+outLine$ >> 'datadir_text$''outputdata_text$'
+#writeInfoLine: outLine$
+
+#.wav file read and formant test
+#set max formant
+maxFormant = 5500
+#read file
+Read from file... 'datadir_text$''dataname_text$'
+#get formant
+To Formant (burg)... 0.01 5 'maxFormant' 0.025 50
 
 
 
