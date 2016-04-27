@@ -4,7 +4,15 @@ var path = require('path');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
+    res.render('mainPage', { title: 'mainPage' });
+});
+
+router.get('/check-page', function(req, res, next) {
+    res.render('check', {title: 'checkPage'});
+});
+
+router.get('/record-page', function(req, res, next) {
+    res.render('record', {title: 'recordPage'});
 });
 
 router.get('/exec-test', function(req, res, next){

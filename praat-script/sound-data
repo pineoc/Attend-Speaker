@@ -1,9 +1,9 @@
 first real: -20
-second real: 0.4
+second real: 4
 third real: 0.4
 fourth real: 0.1
 book sentence: no
-data_dir sentence: c:\Users\Administrator\Desktop\capstone\attend-speaker\sound-data\\test1.wav
+data_dir sentence: ./sound-data\test1.wav
 data_name sentence: test1.wav
 
 
