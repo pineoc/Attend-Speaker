@@ -48,9 +48,9 @@
             <h2 class="cover-heading">음성 출석 체크</h2>
             <p class="lead">처음 방문하셔서 새로 데이터를 등록하시려면 오른쪽 버튼을, <br> 출석체크를 하시려면 왼쪽 버튼을 클릭해주세요.</p>
             <p>
-              <button class="btn btn-default btn-lg">출석체크</button>
+              <button class="btn btn-default btn-lg" onclick="btnCheck()">출석체크</button>
              &nbsp&nbsp
-              <button class="btn btn-default btn-lg">등록하기</button>
+              <button class="btn btn-default btn-lg" onclick="btnRegister()">등록하기</button>
             </p>
           </div>
 
@@ -78,12 +78,12 @@
     //button check
     function btnCheck(){
       alert("출석 체크");
-      document.location.href="/";
+      document.location.href="/check-page";
     }
     //button register
     function btnRegister(){
       alert("register");
-      document.location.href="/";
+      document.location.href="/record-page";
     }
     </script> 
 

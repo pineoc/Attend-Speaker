@@ -57,12 +57,14 @@ function toggleRecording( e ) {
         // stop recording
         audioRecorder.stop();
         e.classList.remove("recording");
+        e.innerHTML = "녹음 시작";
         audioRecorder.getBuffers( gotBuffers );
     } else {
         // start recording
         if (!audioRecorder)
             return;
         e.classList.add("recording");
+        e.innerHTML = "녹음 완료";
         audioRecorder.clear();
         audioRecorder.record();
     }
