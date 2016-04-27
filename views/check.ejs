@@ -48,8 +48,8 @@
             <h2 class="cover-heading">출석 체크</h2>
             <p class="lead">시작 버튼을 클릭하고 출석 문장을 1회 말해주십시오. <br> 녹음이 끝나면 확인 버튼을 클릭해 주십시오. <br> 00:00 <br></p>
             <p>
-              <button class="btn btn-default btn-lg">시작</button>
-              <button class="btn btn-default btn-lg">확인</button>
+              <button type="button" class="btn btn-default btn-lg" onclick="btnStart();">시작</button>
+              <button type="button" class="btn btn-default btn-lg" onclick="btnOK();">확인</button>
             </p>
           </div>
 
@@ -72,6 +72,18 @@
     <script src="javascripts/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="javascripts/ie10-viewport-bug-workaround.js"></script>
-  
+    <script>
+    //button funcs.
+    //button start
+    function btnStart(){
+      alert("녹음 시작");
+    }
+
+    //button ok
+    function btnOK(){
+      alert("녹음 끝");
+    }
+
+    </script>
 
 </body></html>
