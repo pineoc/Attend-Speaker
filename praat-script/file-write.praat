@@ -44,6 +44,7 @@ maxFormant = 5500
 Read from file... 'datadir_text$''dataname_text$'
 #get formant
 To Formant (burg)... 0.01 5 'maxFormant' 0.025 50
+#intstart = Get first formant...1
 
 
 
