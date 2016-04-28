@@ -11,9 +11,9 @@ form Test command line calls
     	real third_real 0.4
     	real fourth_real 0.1
     	sentence bool_text no
-    	sentence datadir_text c:\Users\Administrator\Desktop\capstone\attend-speaker\sound-data\
-	sentence dataname_text test1.wav
-	sentence outputdata_text test1.out
+    	sentence datadir_text C:\Users\test\Desktop\soundData\
+	sentence dataname_text test.wav
+	sentence outputdata_text test.out
 endform
 
 #if sentence, add $ to tail to param_name
@@ -44,11 +44,23 @@ maxFormant = 5500
 Read from file... 'datadir_text$''dataname_text$'
 #get formant
 To Formant (burg)... 0.01 5 'maxFormant' 0.025 50
-#intstart = Get first formant...1
+formant_startTime = Get start time
+formant_endTime = Get end time
+formant_totalTime = Get total duration
+#check data use view
+writeInfoLine: "start time : ", formant_startTime
+appendInfoLine: "end time : ", formant_endTime
+appendInfoLine: "total time : ", formant_totalTime
 
-
-
-#file write to squares.txt numbers
-#for i to 100
-#    appendFileLine: "squares.txt", "The square of ", i, " is ", i * i
-#endfor
+#formant f2, f3 get test
+startTime = Get start time
+endTime = Get end time
+numberOfTimeSteps = (endTime - startTime) / 0.025
+appendInfoLine: "numberOfTimeSteps: ", numberOfTimeSteps
+appendInfoLine: "time", tab$, "f2", tab$, "f3"
+for i to numberOfTimeSteps
+    time = startTime + 0.025 * i
+    f2 = Get value at time... 2 time Hertz Linear
+    f3 = Get value at time... 3 time Hertz Linear
+    appendInfoLine: fixed$ (time, 3), tab$, f2, tab$, f3, tab$
+endfor
