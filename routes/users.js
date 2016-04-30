@@ -25,7 +25,11 @@ router.post('/send-attend', function(req, res, next) {
 });
 
 
-
+/*
+* receive audio data register person
+* @param : regNum, dataURL, personName
+* @result : isValid(Boolean)
+* */
 router.post('/register', function(req, res, next){
     var recvData = req.body;
     //TODO 1:
