@@ -17,6 +17,8 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 DEALINGS IN THE SOFTWARE.
 */
 
+var URL = null;
+
 (function(window){
 
   var WORKER_PATH = 'javascripts/recorderWorker.js';

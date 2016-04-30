@@ -24,7 +24,7 @@ var rafID = null;
 var analyserContext = null;
 var canvasWidth, canvasHeight;
 var recIndex = 0;
-
+var recNum = 1;
 /* TODO:
 
 - offer mono option
@@ -38,7 +38,8 @@ function saveAudio() {
 }
 
 function gotBuffers( buffers ) {
-    var canvas = document.getElementById( "wavedisplay" );
+    var canvas = document.getElementById( "wavedisplay"+ recNum);
+    console.log('wavedisplay num : ', "wavedisplay"+ recNum);
 
     drawBuffer( canvas.width, canvas.height, canvas.getContext('2d'), buffers[0] );
 
@@ -49,7 +50,10 @@ function gotBuffers( buffers ) {
 
 function doneEncoding( blob ) {
     Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
+    //console.log("blob : " + blob + "\nrecordfile : " + "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav");
     recIndex++;
+    recNum++;
+    reqRegiResult();
 }
 
 function toggleRecording( e ) {
@@ -183,6 +187,18 @@ function initAudio() {
             alert('Error getting audio');
             console.log(e);
         });
+}
+
+function reqRegiResult(){
+    $.post("/users/register",{
+        recNum : recNum,
+        dataURL : document.getElementById("save").href,
+        personName : "jiyoon" 
+
+    }, function(data, status){
+        alert("post success, data " + data + "\nstatus: " + status);
+        console.log("data: ", data, "status: ", status);
+    });
 }
 
 window.addEventListener('load', initAudio );

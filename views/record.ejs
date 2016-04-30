@@ -62,27 +62,25 @@
           <div class="inner cover">
             <h2 class="cover-heading">음성 등록</h2>
             <p class="lead">아래 문장을 3회 녹음해주십시오. <br> 1번째 녹음입니다. <br> OOO(본인 이름)입니다. <br></p>
+
+            <div id ="record1">
               <div id="viz">
-                <canvas id="analyser" width="1024" height="100"></canvas>
+                <canvas id="analyser" width="1024" height="80"></canvas>
+                <br><br><br>
+                <canvas id="wavedisplay1" width="1024" height="80"></canvas>
                 <br><br>
-                <canvas id="wavedisplay" width="1024" height="100"></canvas>
+                <canvas id="wavedisplay2" width="1024" height="80"></canvas>
+                <br><br>
+                <canvas id="wavedisplay3" width="1024" height="80"></canvas>
+                <br><br>
               </div>
+            </div>
 
             <p>
-              <button type="button" class="btn btn-default btn-lg" onclick="btnAgain();"> 다시 녹음하기</button>
-             &nbsp&nbsp
               <button type="button" class="btn btn-default btn-lg" onclick="toggleRecording(this);">녹음 시작</button>
               &nbsp&nbsp
-              <a type="button" id="save" class="btn btn-default btn-lg">download</a>
-              &nbsp&nbsp
-              <button type="button" class="btn btn-default btn-lg" onclick="btnRegister();">보내기</button>
+              <a type="button" id="save" class="btn btn-default btn-lg" style="display:none;">download</a>
             </p>
-          </div>
-
-          <div class="mastfoot">
-            <div class="inner">
-              <p>Cover template for <a href="http://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-            </div>
           </div>
 
         </div>
