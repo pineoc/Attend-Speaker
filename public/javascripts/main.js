@@ -51,8 +51,8 @@ function gotBuffers( buffers ) {
 function doneEncoding( blob ) {
     Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
     //console.log("blob : " + blob + "\nrecordfile : " + "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav");
-    recIndex++;
-    recNum++;
+ //   recIndex++;
+ //   recNum++;
     reqRegiResult();
 }
 
@@ -66,6 +66,24 @@ function toggleRecording( e ) {
     } else {
         // start recording
         if (!audioRecorder)
+            return;
+        e.classList.add("recording");
+        e.innerHTML = "녹음 완료";
+        audioRecorder.clear();
+        audioRecorder.record();
+    }
+}
+
+function toggleChecking( e ) {
+    if(e.classList.contains("recording")) {
+        //stop recording
+        audioRecorder.stop();
+        e.classList.remove("recording");
+        e.innerHTML = "녹음 시작";
+        audioRecorder.getBuffers( gotBuffers );
+    } else {
+        //start recording
+        if(!audioRecorder)
             return;
         e.classList.add("recording");
         e.innerHTML = "녹음 완료";

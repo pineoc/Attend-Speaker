@@ -12,7 +12,17 @@
     <link rel="icon" href="http://bootstrapk.com/favicon.ico">
 
     <title>출석체크</title>
+    <style>
+      canvas { 
+    display: inline-block; 
+    background: #202020; 
+    width: 95%;
+    height: 45%;
+    box-shadow: 0px 0px 10px blue;
+  }
 
+ 
+    </style>
     <!-- Bootstrap core CSS -->
     <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
 
@@ -28,6 +38,9 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="javascripts/recorder.js"></script>
+    <script src="javascripts/main.js"></script>
+    <script src="javascripts/audiodisplay.js"></script>
   </head>
 
   <body>
@@ -47,17 +60,19 @@
           <div class="inner cover">
             <h2 class="cover-heading">출석 체크</h2>
             <p class="lead">시작 버튼을 클릭하고 출석 문장을 1회 말해주십시오. <br> 녹음이 끝나면 확인 버튼을 클릭해 주십시오. <br> 00:00 <br></p>
+               <div id="viz">
+                <canvas id="analyser" width="1024" height="80"></canvas>
+                <br><br>
+                <canvas id="wavedisplay1" width="1024" height="80"></canvas>
+              </div>
+
             <p>
-              <button type="button" class="btn btn-default btn-lg" onclick="btnStart();">시작</button>
-              <button type="button" class="btn btn-default btn-lg" onclick="btnOK();">확인</button>
+              <br>
+              <button type="button" class="btn btn-default btn-lg" onclick="toggleChecking(this);">녹음 시작</button>
+              <a type="button" id="save" class="btn btn-default btn-lg" style="display:none;">download</a>
             </p>
           </div>
 
-          <div class="mastfoot">
-            <div class="inner">
-              <p>Cover template for <a href="http://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
-            </div>
-          </div>
 
         </div>
 
@@ -72,18 +87,5 @@
     <script src="javascripts/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="javascripts/ie10-viewport-bug-workaround.js"></script>
-    <script>
-    //button funcs.
-    //button start
-    function btnStart(){
-      alert("녹음 시작");
-    }
-
-    //button ok
-    function btnOK(){
-      alert("녹음 끝");
-    }
-
-    </script>
 
 </body></html>
