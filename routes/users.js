@@ -11,15 +11,6 @@ router.get('/list', function(req, res, next) {
 });
 
 /*
-* show check attendance page
-*
-*
-* */
-router.get('/check-attendance', function(req, res, next) {
-    res.render('check', {title: 'checkPage'});
-});
-
-/*
 * receive audio data from page
 *
 *
@@ -33,9 +24,7 @@ router.post('/send-attend', function(req, res, next) {
     res.json(recvData);
 });
 
-router.get('/register-speaker', function(req, res, next) {
-    res.render('record', {title: 'recordPage'});
-});
+
 
 router.post('/register', function(req, res, next){
     var recvData = req.body;

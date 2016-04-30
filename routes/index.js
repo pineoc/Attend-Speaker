@@ -7,6 +7,19 @@ router.get('/', function(req, res, next) {
     res.render('mainPage', { title: 'mainPage' });
 });
 
+router.get('/register-speaker', function(req, res, next) {
+    res.render('record', {title: 'recordPage'});
+});
+
+/*
+ * show check attendance page
+ *
+ *
+ * */
+router.get('/check-attendance', function(req, res, next) {
+    res.render('check', {title: 'checkPage'});
+});
+
 
 router.get('/exec-test', function(req, res, next){
     var child_proc = require('child_process');
