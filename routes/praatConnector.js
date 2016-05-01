@@ -31,7 +31,7 @@ exports.makeDatas = function(wavFilePath, wavFilename, dataPath, dataName, callb
 
     //command
     var textGridCommand = praatCommand + __dirname + "/../praat-script/" + scriptToRun + " " + scriptParameters; //+ " 2>&1 ";
-    console.log("textGridCommand: ", textGridCommand);
+    //console.log("textGridCommand: ", textGridCommand);
     var options = {
         encoding: 'utf8',
         timeout: 0,
@@ -52,9 +52,44 @@ exports.makeDatas = function(wavFilePath, wavFilename, dataPath, dataName, callb
 
 /*
  * compare data personPath
- * @params: dataDirPath,
+ * @params: dataDirPath, filename1, filename2
  * @result:
  * */
-exports.compareDatas = function(){
+exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
+    var child_proc = require('child_process');
+    var comp_dir = path.join(__dirname, '../data-compare-sol/data-compare-sol/x64/Debug');
+    var comp_cmd = path.join(__dirname, '../data-compare-sol/data-compare-sol/x64/Debug') + "/data-compare-sol";
+    comp_cmd = comp_cmd.replace(/\\/g, '/');
 
+    var comp_cmd_params = dataDirPath + filename1 + " " + dataDirPath + filename2;
+
+    var result_cmd = comp_cmd + " " + comp_cmd_params;
+
+    console.log('result_cmd: ', result_cmd);
+    var exec_callback = function(err, stdout, stderr){
+        if(err){
+            console.log('compareDatas error occurred, ', err);
+            callback({
+                resCode: -1,
+                msg:'exec err',
+                err: err
+            });
+        } else {
+            callback({
+                resCode: -1,
+                msg: 'exec success',
+                stdout: stdout,
+                stderr: stderr
+            });
+        }
+    };
+    var options = {
+        encoding: 'utf8',
+        timeout: 0,
+        killSignal: 'SIGTERM',
+        cwd: comp_dir,
+        env: process.env
+    };
+    //execute
+    child_proc.exec(comp_cmd, options, exec_callback);
 };

@@ -94,7 +94,7 @@ router.post('/register', function(req, res, next){
                 //          if num==2 (compare with first data, return result)
                 //          if num==3 (compare with second data, return result, insert to db or not)
                 console.log("w2 start, arg: ", arg, recvData.recNum);
-            var recNum = parseInt(recvData.recNum);
+                var recNum = parseInt(recvData.recNum);
                 if(recNum === 1) {
                     var user_path = SOUND_DATA_PATH + recvData.personName + recvData.idNum;
                     mkdirp(user_path, function(err){
@@ -124,6 +124,11 @@ router.post('/register', function(req, res, next){
                                 if(resBool){
                                     //TODO : compare with first datas, if valid data-> next step
                                     //      not valid, cb('err', {resCode: -1, msg: '2bad'});
+                                    var filename1 = arg.filename;
+                                    var filename2 = recvData.personName.toString() + (recvData.recNum - 1).toString() + ".wav";
+                                    praatConnector.compareDatas(user_path + "/", filename1, filename2, function(result){
+
+                                    });
                                     cb(null, {resCode: 1, msg: '2good'});
                                 } else {
                                     cb('err', {resCode: -1, msg: '2bad'});
@@ -148,6 +153,24 @@ router.post('/register', function(req, res, next){
                             });
                         }
                     });
+                }
+            }, function(arg, cb){
+                //if last phase, insert data to DB
+                if(arg.msg === '3good'){
+                    //user path data
+                    var user_path = SOUND_DATA_PATH + recvData.personName + recvData.idNum + "/";
+                    //insert user
+                    dbController.insertOneUser([user_path, recvData.personName, recvData.idNum],function(result){
+                        if(result.resCode){
+                            cb(null, {resCode: 1, msg: "user insert success"});
+                        } else {
+                            //error on db insert
+                            console.log("user insert error msg: ", result.msg);
+                            cb('err', {resCode: -1, msg: "user insert fail"});
+                        }
+                    });
+                } else {
+                    cb(null, {resCode: 1, msg: recvData.recNum + 'good'});
                 }
             }
         ],

@@ -85,7 +85,7 @@ exports.selectOne = function(tableName, wherePhrase, params, callback){
 
 /*
  * Insert data INTO T_USER, insertOne
- * @param: insertData(user_idx, user_dir, user_name)
+ * @param: insertData(user_dir, user_name, user_idnum)
  * @result: resCode, data(object)
  * */
 exports.insertOneUser = function(insertData, callback){
@@ -93,7 +93,7 @@ exports.insertOneUser = function(insertData, callback){
         if(err)
             callback({resCode: false, data: null, msg: 'getConnection fail, code: ' + err});
         else {
-            conn.query('INSERT INTO T_USER(user_idx, user_dir, user_name) VALUES(?,?,?)', insertData, function(err, result){
+            conn.query('INSERT INTO T_USER(user_dir, user_name, user_idnum) VALUES(?,?,?)', insertData, function(err, result){
                 if(err){
                     callback({resCode: false, data: null, msg: err });
                 } else {
