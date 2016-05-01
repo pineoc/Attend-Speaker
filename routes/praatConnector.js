@@ -68,7 +68,7 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
     console.log('result_cmd: ', result_cmd);
     var exec_callback = function(err, stdout, stderr){
         if(err){
-            console.log('compareDatas error occurred, ', err);
+            //console.log('compareDatas error occurred, ', err);
             callback({
                 resCode: -1,
                 msg:'exec err',
@@ -76,7 +76,7 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
             });
         } else {
             callback({
-                resCode: -1,
+                resCode: 1,
                 msg: 'exec success',
                 stdout: stdout,
                 stderr: stderr
@@ -87,9 +87,8 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
         encoding: 'utf8',
         timeout: 0,
         killSignal: 'SIGTERM',
-        cwd: comp_dir,
         env: process.env
     };
     //execute
-    child_proc.exec(comp_cmd, options, exec_callback);
+    child_proc.exec(result_cmd, options, exec_callback);
 };

@@ -77,8 +77,8 @@ router.get('/comp-test', function(req,res){
     praatCont.compareDatas(user_path + "/", filename1, filename2, function(result){
         if(result.resCode == 1){
             //success
-            console.log('comp success, data: ', result);
-            res.send('success');
+            //console.log('comp success, data: ', result);
+            res.json({result: "success", data: result});
         } else {
             //fail
             console.log('comp fail, data: ', result);
