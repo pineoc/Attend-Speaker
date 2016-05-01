@@ -25,6 +25,8 @@ var analyserContext = null;
 var canvasWidth, canvasHeight;
 var recIndex = 0;
 var recNum = 1;
+
+var currblob = null;
 /* TODO:
 
 - offer mono option
@@ -50,10 +52,12 @@ function gotBuffers( buffers ) {
 
 function doneEncoding( blob ) {
     Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
-    //console.log("blob : " + blob + "\nrecordfile : " + "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav");
- //   recIndex++;
- //   recNum++;
+
+    currblob = blob;
     reqRegiResult();
+
+    recIndex++;
+    recNum++;
 }
 
 function toggleRecording( e ) {
@@ -208,15 +212,30 @@ function initAudio() {
 }
 
 function reqRegiResult(){
-    $.post("/users/register",{
-        recNum : recNum,
-        dataURL : document.getElementById("save").href,
-        personName : "jiyoon" 
-
-    }, function(data, status){
-        alert("post success, data " + data + "\nstatus: " + status);
-        console.log("data: ", data, "status: ", status);
+    console.log("currblob : ", currblob);
+    var blobToBase64 = function(blob, cb) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var dataUrl = reader.result;
+            var base64 = dataUrl.split(',')[1];
+            cb(base64);
+        };
+        reader.readAsDataURL(blob);
+    };
+    blobToBase64(currblob, function(base64){
+        //var update = {'blob': base64};
+        $.post("/users/register",{
+            recNum : recNum - 1,
+            dataURL : document.getElementById("save").href,
+            blobData : base64,
+            personName : "jiyoon",
+            idNum : "1234"
+        }, function(data, status){
+            //alert("post success, data " + data + "\nstatus: " + status);
+            console.log("data: ", data, "status: ", status);
+        });
     });
+
 }
 
 window.addEventListener('load', initAudio );
