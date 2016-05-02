@@ -61,11 +61,12 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
     var comp_cmd = path.join(__dirname, '../data-compare-sol/data-compare-sol/x64/Debug') + "/data-compare-sol";
     comp_cmd = comp_cmd.replace(/\\/g, '/');
 
-    var comp_cmd_params = dataDirPath + filename1 + " " + dataDirPath + filename2;
+    //"dev" used for test with compare program
+    var comp_cmd_params = dataDirPath + filename1 + " " + dataDirPath + filename2 + " dev";
 
     var result_cmd = comp_cmd + " " + comp_cmd_params;
 
-    console.log('result_cmd: ', result_cmd);
+    //console.log('result_cmd: ', result_cmd);
     var exec_callback = function(err, stdout, stderr){
         if(err){
             //console.log('compareDatas error occurred, ', err);
@@ -75,11 +76,19 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
                 err: err
             });
         } else {
+            var stdout_result = JSON.parse(stdout);
+            var isValid = false;
+
+            //test standard rate = 70.0
+            if(stdout_result.pitch_rate > 70.0 && stdout_result.int_rate > 70.0)
+                isValid = true;
+
             callback({
                 resCode: 1,
                 msg: 'exec success',
-                stdout: stdout,
-                stderr: stderr
+                pitch_rate: stdout_result.pitch_rate,
+                int_rate: stdout_result.int_rate,
+                isValid: isValid
             });
         }
     };
@@ -87,6 +96,7 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
         encoding: 'utf8',
         timeout: 0,
         killSignal: 'SIGTERM',
+        cwd: comp_dir,
         env: process.env
     };
     //execute

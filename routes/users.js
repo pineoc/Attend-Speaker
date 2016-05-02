@@ -39,7 +39,7 @@ router.post('/send-attend', function(req, res, next) {
  * */
 router.post('/register', function(req, res, next){
     var recvData = req.body;
-    console.log(recvData);
+    //console.log(recvData);
     if(typeof recvData.recNum === 'undefined' || recvData.recNum === null){
         res.json({resCode:-1, msg: "no recNum"});
         return;
@@ -127,9 +127,19 @@ router.post('/register', function(req, res, next){
                                     var filename1 = arg.filename;
                                     var filename2 = recvData.personName.toString() + (recvData.recNum - 1).toString() + ".wav";
                                     praatConnector.compareDatas(user_path + "/", filename1, filename2, function(result){
-
+                                        if(result.resCode === 1){
+                                            if(result.isValid) {
+                                                cb(null, {resCode: 1, msg: '2good'});
+                                            } else {
+                                                console.log('data2 isValid : false, values: ', result.pitch_rate, result.int_rate);
+                                                cb('err', {resCode: -1, msg: '2bad'});
+                                            }
+                                        } else {
+                                            console.log('data2 compareDatas() error!');
+                                            cb('err', {resCode: -1, msg: '2bad'});
+                                        }
                                     });
-                                    cb(null, {resCode: 1, msg: '2good'});
+                                    //cb(null, {resCode: 1, msg: '2good'});
                                 } else {
                                     cb('err', {resCode: -1, msg: '2bad'});
                                 }
@@ -146,7 +156,23 @@ router.post('/register', function(req, res, next){
                             console.log("3mkdirp success");
                             praatConnector.makeDatas(arg.saveFileDirPath, arg.filename, user_path, arg.filename, function(resBool){
                                 if(resBool){
-                                    cb(null, {resCode: 1, msg: '3good'});
+                                    //TODO : compare with first datas, if valid data-> next step
+                                    //      not valid, cb('err', {resCode: -1, msg: '3bad'});
+                                    var filename1 = arg.filename;
+                                    var filename2 = recvData.personName.toString() + (recvData.recNum - 1).toString() + ".wav";
+                                    praatConnector.compareDatas(user_path + "/", filename1, filename2, function(result){
+                                        if(result.resCode === 1){
+                                            if(result.isValid) {
+                                                cb(null, {resCode: 1, msg: '3good'});
+                                            } else {
+                                                console.log('data3 isValid : false, values: ', result.pitch_rate, result.int_rate);
+                                                cb('err', {resCode: -1, msg: '3bad'});
+                                            }
+                                        } else {
+                                            console.log('data3 compareDatas() error!');
+                                            cb('err', {resCode: -1, msg: '3bad'});
+                                        }
+                                    });
                                 } else {
                                     cb('err', {resCode: -1, msg: '3bad'});
                                 }

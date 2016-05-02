@@ -71,14 +71,19 @@ router.post('/user-insert-test', function(req, res){
 
 router.get('/comp-test', function(req,res){
     var praatCont = require('./praatConnector');
-    var user_path = "C:/Users/test/Documents/GitHub/Attend-Speaker/sound-data/jiyoon1234";
+    var user_path = __dirname + "/../sound-data/jiyoon1234";
     var filename1 = "jiyoon1.wav";
     var filename2 = "jiyoon2.wav";
     praatCont.compareDatas(user_path + "/", filename1, filename2, function(result){
         if(result.resCode == 1){
             //success
-            //console.log('comp success, data: ', result);
-            res.json({result: "success", data: result});
+            console.log('comp success, data: ', result, result);
+            res.json({
+                result: "success",
+                pitch_rate: result.pitch_rate,
+                int_rate: result.int_rate,
+                isValid: result.isValid
+            });
         } else {
             //fail
             console.log('comp fail, data: ', result);
