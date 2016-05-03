@@ -25,10 +25,99 @@ router.get('/list', function(req, res, next) {
 router.post('/send-attend', function(req, res, next) {
     var recvData = req.body;
     //TODO 1: receive audio file check. not null, file is vaild
-    //TODO 2: file save to tmp dir, get path
-    //TODO 3: compare data with database datas
-    //TODO 4: return name who check attendance
-    res.json(recvData);
+    if(typeof recvData.blobData === 'undefined' || recvData.blobData === null) {
+        res.json({resCode: -1, msg: "no audioData"});
+        return;
+    }
+
+    async.waterfall([
+        function(cb){
+            //TODO 2: file save to tmp dir, get path
+            var buff = new Buffer(recvData.blobData, 'base64');
+            var dateVal = new Date().getTime();
+            var saveFilePath = __dirname + "/../sound-data/tmp/" + dateVal + ".wav";
+
+            fs.writeFile(saveFilePath, buff, function(err){
+                if(err){
+                    console.log('attend, w1 write file error: ', err);
+                    cb('err', {resCode: -1, msg: "attend bad, write file error"});
+                } else {
+                    console.log('attend, w1 write file success');
+                    var filename = dateVal + ".wav";
+                    var saveFileDirPath = __dirname + "/../sound-data/tmp";
+                    var outFileDirPath = __dirname + "/../sound-data/tmp/data";
+                    praatConnector.makeDatas(saveFileDirPath + "/", filename, outFileDirPath, filename, function(resBool){
+                        if(resBool){
+                            var nextArg = {
+                                filename: filename,
+                                outFileDirPath : outFileDirPath
+                            };
+                            cb(null, nextArg);
+                        } else {
+                            console.log('attend, make datas fail');
+                            cb('err', {resCode: -1, msg: 'make data fail'});
+                        }
+                    });
+                }
+            });
+        }, function(arg, cb) {
+            //TODO 3: compare data with database datas
+            dbController.selectAll('T_USER', function(result){
+                if(result.resCode){
+                    var dataArr = result.data;
+                    var corrArr = [];
+                    var dataCnt = dataArr.length;
+                    dataArr.forEach(function(elem){
+                        var data1 = elem.user_dir + elem.user_name + "1.wav";
+                        var data2 = arg.outFileDirPath + "/" + arg.filename;
+                        console.log("data1: ", data1, "data2: ", data2);
+                        praatConnector.compareDatas_attend(data1, data2, function(result){
+                            if(result.resCode === 1){
+                                console.log("pitch_rate", elem.pitch_rate, "int_rate", elem.int_rate);
+                                var corrObj = {
+                                    user_idx: elem.user_idx,
+                                    user_name: elem.user_name,
+                                    pitch_rate: result.pitch_rate,
+                                    int_rate: result.int_rate,
+                                    comp_val: result.pitch_rate * 0.6 + result.int_rate * 0.4
+                                };
+                                corrArr.push(corrObj);
+                                dataCnt--;
+
+                                if(dataCnt === 0){
+                                    //end foreach
+                                    cb(null, {data: corrArr});
+                                }
+                            } else {
+                                console.log('compareDatas_attend() error!');
+                                return cb('err', {resCode: -1, msg: 'compare_attend err'});
+                            }
+                        });
+                    });
+                } else {
+                    //select error
+                    cb('err', {resCode: -1, msg: 'SelectAll err'});
+                }
+            });
+        } , function(arg, cb) {
+            //sort corrArr
+            var dataArr = arg.data;
+            //sort by comp_val
+            dataArr.sort(function(a, b){
+                return b.comp_val - a.comp_val;
+            });
+            console.log('dataArr: ', dataArr);
+            console.log('attend person: ', dataArr[0]);
+            cb(null, {resCode: 1, checkResult: dataArr[0]});
+        }
+    ],function(err, result){
+        if(err){
+            res.json(result);
+        } else {
+            //TODO 4: return name who check attendance
+            res.json(result);
+        }
+    });
 });
 
 
@@ -40,6 +129,8 @@ router.post('/send-attend', function(req, res, next) {
 router.post('/register', function(req, res, next){
     var recvData = req.body;
     //console.log(recvData);
+
+    //check params
     if(typeof recvData.recNum === 'undefined' || recvData.recNum === null){
         res.json({resCode:-1, msg: "no recNum"});
         return;

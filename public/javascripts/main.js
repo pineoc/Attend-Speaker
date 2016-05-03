@@ -41,7 +41,6 @@ function saveAudio() {
 
 function gotBuffers( buffers ) {
     var canvas = document.getElementById( "wavedisplay"+ recNum);
-    console.log('wavedisplay num : ', "wavedisplay"+ recNum);
 
     drawBuffer( canvas.width, canvas.height, canvas.getContext('2d'), buffers[0] );
 
@@ -268,6 +267,7 @@ function reqRegiResult(){
             }else{
                 console.log("status fail");
             }
+            currblob = null;
         });
     });
 
@@ -277,7 +277,7 @@ function checkBtn(){
     //disable button
     buttonBlock(document.getElementById("checkBtn"));
 
-    //console.log("currblob : ", currblob);
+    //console.log("currblob : ", currblob, currblob.length);
     var blobToBase64 = function(blob, cb) {
         var reader = new FileReader();
         reader.onload = function() {
@@ -290,6 +290,7 @@ function checkBtn(){
     blobToBase64(currblob, function(base64){
         //var update = {'blob': base64};
         $.post("/users/send-attend",{
+            dataURL : document.getElementById("save").href,
             blobData : base64
         }, function(data, status){
             //alert("post success, data " + data + "\nstatus: " + status);
@@ -298,16 +299,15 @@ function checkBtn(){
             buttonBlock(document.getElementById("checkBtn"));
             if(status == "success"){
                 if(data.resCode == 1){
-                    alert("출석 체크 되었습니다.");
+                    alert("출석 체크 되었습니다. " + data.checkResult.user_name + "님 반갑습니다.");
                     location.replace("/");  //go to main
-                    
                 }else{
                     alert("record again please!");
                 }
-
             }else{
                 console.log("status fail");
             }
+            currblob = null;
         });
     });    
 }

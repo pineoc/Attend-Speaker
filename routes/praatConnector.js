@@ -102,3 +102,50 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
     //execute
     child_proc.exec(result_cmd, options, exec_callback);
 };
+
+/*
+ * compare data personPath
+ * @params: filename1, filename2
+ * @result:
+ * */
+exports.compareDatas_attend = function(filename1, filename2, callback){
+    var child_proc = require('child_process');
+    var comp_dir = path.join(__dirname, '../data-compare-sol/data-compare-sol/x64/Debug');
+    var comp_cmd = path.join(__dirname, '../data-compare-sol/data-compare-sol/x64/Debug') + "/data-compare-sol";
+    comp_cmd = comp_cmd.replace(/\\/g, '/');
+
+    //"dev" used for test with compare program
+    var comp_cmd_params = filename1 + " " + filename2 + " dev";
+
+    var result_cmd = comp_cmd + " " + comp_cmd_params;
+
+    //console.log('result_cmd: ', result_cmd);
+    var exec_callback = function(err, stdout, stderr){
+        if(err){
+            //console.log('compareDatas error occurred, ', err);
+            callback({
+                resCode: -1,
+                msg:'exec err',
+                err: err
+            });
+        } else {
+            var stdout_result = JSON.parse(stdout);
+
+            callback({
+                resCode: 1,
+                msg: 'exec success',
+                pitch_rate: stdout_result.pitch_rate,
+                int_rate: stdout_result.int_rate
+            });
+        }
+    };
+    var options = {
+        encoding: 'utf8',
+        timeout: 0,
+        killSignal: 'SIGTERM',
+        cwd: comp_dir,
+        env: process.env
+    };
+    //execute
+    child_proc.exec(result_cmd, options, exec_callback);
+};
