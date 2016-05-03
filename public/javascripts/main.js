@@ -54,10 +54,9 @@ function doneEncoding( blob ) {
     Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
 
     currblob = blob;
-    reqRegiResult();
 
-    recIndex++;
-    recNum++;
+
+    reqRegiResult();
 }
 
 function toggleRecording( e ) {
@@ -93,6 +92,15 @@ function toggleChecking( e ) {
         e.innerHTML = "녹음 완료";
         audioRecorder.clear();
         audioRecorder.record();
+    }
+}
+
+function buttonBlock(e){
+    if(e.classList.contains("disabled")){
+        //cur : send -> disabled
+        e.classList.remove("disabled");
+    }else{
+        e.classList.add("disabled");
     }
 }
 
@@ -212,7 +220,10 @@ function initAudio() {
 }
 
 function reqRegiResult(){
-    console.log("currblob : ", currblob);
+    //disable button
+    buttonBlock(document.getElementById("regiBtn"));
+
+    //console.log("currblob : ", currblob);
     var blobToBase64 = function(blob, cb) {
         var reader = new FileReader();
         reader.onload = function() {
@@ -225,14 +236,35 @@ function reqRegiResult(){
     blobToBase64(currblob, function(base64){
         //var update = {'blob': base64};
         $.post("/users/register",{
-            recNum : recNum - 1,
+            recNum : recNum,
             dataURL : document.getElementById("save").href,
             blobData : base64,
-            personName : "jiyoon",
-            idNum : "1234"
+            personName : document.getElementById("user_name").value,
+            idNum : document.getElementById("student_num").value
         }, function(data, status){
             //alert("post success, data " + data + "\nstatus: " + status);
             console.log("data: ", data, "status: ", status);
+            //enable button
+            buttonBlock(document.getElementById("regiBtn"));
+            if(status == "success"){
+                if(data.resCode == 1){
+                    //record&store success
+                    if(data.msg == "1good"){
+                        recNum++; recIndex++;
+                    }else if(data.msg == "2good"){
+                        recNum++; recIndex++;
+                    }else{ //3good
+                        recNum=0; recIndex=0;
+                        alert("registration finish");
+                        location.replace("/");  //go to main
+                    }
+                }else{
+                    alert("record again please!");
+                }
+
+            }else{
+                console.log("status fail");
+            }
         });
     });
 
