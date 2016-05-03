@@ -55,8 +55,11 @@ function doneEncoding( blob ) {
 
     currblob = blob;
 
-
-    reqRegiResult();
+    if(document.getElementById("regiBtn"))
+    { reqRegiResult(); }
+    else
+    { checkBtn(); }
+    
 }
 
 function toggleRecording( e ) {
@@ -268,6 +271,45 @@ function reqRegiResult(){
         });
     });
 
+}
+
+function checkBtn(){
+    //disable button
+    buttonBlock(document.getElementById("checkBtn"));
+
+    //console.log("currblob : ", currblob);
+    var blobToBase64 = function(blob, cb) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var dataUrl = reader.result;
+            var base64 = dataUrl.split(',')[1];
+            cb(base64);
+        };
+        reader.readAsDataURL(blob);
+    };
+    blobToBase64(currblob, function(base64){
+        //var update = {'blob': base64};
+        $.post("/users/send-attend",{
+            blobData : base64
+        }, function(data, status){
+            //alert("post success, data " + data + "\nstatus: " + status);
+            console.log("data: ", data, "status: ", status);
+            //enable button
+            buttonBlock(document.getElementById("checkBtn"));
+            if(status == "success"){
+                if(data.resCode == 1){
+                    alert("출석 체크 되었습니다.");
+                    location.replace("/");  //go to main
+                    
+                }else{
+                    alert("record again please!");
+                }
+
+            }else{
+                console.log("status fail");
+            }
+        });
+    });    
 }
 
 window.addEventListener('load', initAudio );

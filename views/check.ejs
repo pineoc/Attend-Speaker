@@ -59,7 +59,7 @@
 
           <div class="inner cover">
             <h2 class="cover-heading">출석 체크</h2>
-            <p class="lead">시작 버튼을 클릭하고 출석 문장을 1회 말해주십시오. <br> 녹음이 끝나면 확인 버튼을 클릭해 주십시오. <br> 00:00 <br></p>
+            <p class="lead">시작 버튼을 클릭하고 출석 문장을 1회 말해주십시오. <br> 녹음이 끝나면 확인 버튼을 클릭해 주십시오.<br></p>
                <div id="viz">
                 <canvas id="analyser" width="1024" height="80"></canvas>
                 <br><br>
@@ -68,7 +68,7 @@
 
             <p>
               <br>
-              <button type="button" class="btn btn-default btn-lg" onclick="toggleChecking(this);">녹음 시작</button>
+              <button type="button" id="checkBtn" class="btn btn-default btn-lg" onclick="toggleChecking(this);">녹음 시작</button>
               <a type="button" id="save" class="btn btn-default btn-lg" style="display:none;">download</a>
             </p>
           </div>
