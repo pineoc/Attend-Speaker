@@ -151,3 +151,7 @@ exports.compareDatas_attend = function(filename1, filename2, callback){
     //execute
     child_proc.exec(result_cmd, options, exec_callback);
 };
+
+exports.recordFileDelete = function(file, cb){
+
+};
