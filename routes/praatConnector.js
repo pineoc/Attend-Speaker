@@ -5,6 +5,10 @@
 
 var path = require('path');
 
+//compare function data set
+var comp_dir = path.join(__dirname, '../data-compare-sol');
+var comp_cmd = comp_dir + "/data-compare-sol";
+comp_cmd = comp_cmd.replace(/\\/g, '/');
 /*
 * make data to personPath
 * @params: wavFilePath, wavFilename, dataPath, dataName
@@ -31,7 +35,7 @@ exports.makeDatas = function(wavFilePath, wavFilename, dataPath, dataName, callb
 
     //command
     var textGridCommand = praatCommand + __dirname + "/../praat-script/" + scriptToRun + " " + scriptParameters; //+ " 2>&1 ";
-    //console.log("textGridCommand: ", textGridCommand);
+
     var options = {
         encoding: 'utf8',
         timeout: 0,
@@ -44,7 +48,7 @@ exports.makeDatas = function(wavFilePath, wavFilename, dataPath, dataName, callb
             console.log('make data error occurred, ', error);
             callback(false);
         } else {
-            console.log('make data std: ', stdout, stderr);
+            //console.log('make data std: ', stdout, stderr);
             callback(true);
         }
     });
@@ -57,9 +61,6 @@ exports.makeDatas = function(wavFilePath, wavFilename, dataPath, dataName, callb
  * */
 exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
     var child_proc = require('child_process');
-    var comp_dir = path.join(__dirname, '../data-compare-sol/data-compare-sol/x64/Debug');
-    var comp_cmd = path.join(__dirname, '../data-compare-sol/data-compare-sol/x64/Debug') + "/data-compare-sol";
-    comp_cmd = comp_cmd.replace(/\\/g, '/');
 
     //"dev" used for test with compare program
     var comp_cmd_params = dataDirPath + filename1 + " " + dataDirPath + filename2 + " dev";
@@ -80,7 +81,7 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
             var isValid = false;
 
             //test standard rate = 70.0
-            if(stdout_result.pitch_rate > 70.0 && stdout_result.int_rate > 70.0)
+            if(stdout_result.pitch_rate > 50.0 && stdout_result.int_rate > 50.0)
                 isValid = true;
 
             callback({
@@ -110,9 +111,6 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
  * */
 exports.compareDatas_attend = function(filename1, filename2, callback){
     var child_proc = require('child_process');
-    var comp_dir = path.join(__dirname, '../data-compare-sol/data-compare-sol/x64/Debug');
-    var comp_cmd = path.join(__dirname, '../data-compare-sol/data-compare-sol/x64/Debug') + "/data-compare-sol";
-    comp_cmd = comp_cmd.replace(/\\/g, '/');
 
     //"dev" used for test with compare program
     var comp_cmd_params = filename1 + " " + filename2 + " dev";
@@ -122,14 +120,18 @@ exports.compareDatas_attend = function(filename1, filename2, callback){
     //console.log('result_cmd: ', result_cmd);
     var exec_callback = function(err, stdout, stderr){
         if(err){
-            //console.log('compareDatas error occurred, ', err);
             callback({
                 resCode: -1,
                 msg:'exec err',
                 err: err
             });
         } else {
-            var stdout_result = JSON.parse(stdout);
+            var stdout_result = null;
+            try{
+                stdout_result = JSON.parse(stdout);
+            } catch(err){
+                return callback({resCode: -1, msg: 'json parse err'});
+            }
 
             callback({
                 resCode: 1,

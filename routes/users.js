@@ -70,10 +70,10 @@ router.post('/send-attend', function(req, res, next) {
                     dataArr.forEach(function(elem){
                         var data1 = elem.user_dir + elem.user_name + "1.wav";
                         var data2 = arg.outFileDirPath + "/" + arg.filename;
-                        console.log("data1: ", data1, "data2: ", data2);
+                        //console.log("data1: ", data1, "data2: ", data2);
                         praatConnector.compareDatas_attend(data1, data2, function(result){
                             if(result.resCode === 1){
-                                console.log("pitch_rate", elem.pitch_rate, "int_rate", elem.int_rate);
+                                //console.log("pitch_rate", elem.pitch_rate, "int_rate", elem.int_rate);
                                 var corrObj = {
                                     user_idx: elem.user_idx,
                                     user_name: elem.user_name,
@@ -108,7 +108,7 @@ router.post('/send-attend', function(req, res, next) {
             });
             console.log('dataArr: ', dataArr);
             console.log('attend person: ', dataArr[0]);
-            cb(null, {resCode: 1, checkResult: dataArr[0]});
+            cb(null, {resCode: 1, checkResult: dataArr[0], checkDataArr: dataArr});
         }
     ],function(err, result){
         if(err){
