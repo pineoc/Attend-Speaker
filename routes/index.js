@@ -83,7 +83,7 @@ router.get('/exec-test', function(req, res, next){
 router.get('/get-data', function(req, res){
     var recvData = req.query;
     console.log(recvData, recvData.name, recvData.dir);
-    
+
     async.waterfall([
             function(cb){
                 //pitch data
@@ -100,6 +100,8 @@ router.get('/get-data', function(req, res){
                         for(var i=0; i< array.length; i++){
                             array[i].toString().replace("\r\n", "");
                             var dataDouble = array[i].toString().split("\t");
+                            if(dataDouble[1] === "--undefined--")
+                                dataDouble[1] = "0.0";
                             dataArr.push(dataDouble[1]);
                         }
                         cb(null, dataArr);
@@ -123,7 +125,7 @@ router.get('/get-data', function(req, res){
                             dataArr.push(dataDouble[1]);
                         }
                         var sendData = {
-                            formantData: arg,
+                            pitchData: arg,
                             intensityData: dataArr
                         };
                         cb(null, sendData);
@@ -162,7 +164,7 @@ router.get('/get-data', function(req, res){
         function(err, result){
             if(err){
                 console.log('err: ', err);
-                res.json({err:err});
+                res.json({err: err});
             } else {
                 res.json(result);
             }
