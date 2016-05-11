@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://bootstrapk.com/examples/cover/ -->
+<html lang="ko">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://bootstrapk.com/favicon.ico">
+
+    <title>유저 리스트</title>
+    <style>
+
+    </style>
+    <!-- Bootstrap core CSS -->
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="stylesheets/cover.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="javascripts/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="javascripts/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="site-wrapper">
+    <div class="site-wrapper-inner">
+        <div class="cover-container">
+            <div class="masthead clearfix">
+                <div class="inner">
+                    <h5 class="masthead-brand">Capstone Design</h5>
+                </div>
+            </div>
+            <div class="inner cover">
+                <h1>출석 체크 명단</h1>
+                <table class="table" style="background-color: snow; color: black; text-decoration: none;">
+                    <thead>
+                    <tr>
+                        <th>이름</th>
+                        <th>학번</th>
+                        <th>출석</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% for(var i=0; i < datas.length; i++){%>
+                    <tr>
+                        <th><%=datas[i].user_name%></th>
+                        <th><%=datas[i].user_idnum%></th>
+                        <th>
+                            <% if(datas[i].user_attend==1){%>
+                            <span style="color:greenyellow;">출석</span>
+                            <%} else {%>
+                            <span style="color:orangered">결석</span>
+                            <%}%>
+                        </th>
+                    </tr>
+                    <%}%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="javascripts/jquery.min.js"></script>
+<script src="javascripts/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="javascripts/ie10-viewport-bug-workaround.js"></script>
+<script>
+
+</script>
+
+</body></html>
