@@ -65,8 +65,8 @@
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     //pitch data test
-
-    d3.tsv("test-p.out", type, function(error, data) {
+    var pitch_filename = "<%=filename%>" + "-p.out";
+    d3.tsv(pitch_filename, type, function(error, data) {
         if (error) throw error;
 
         x.domain(d3.extent(data, function(d) { return d.time; }));
@@ -109,7 +109,8 @@
             .x(function(d) { return x(d.time); })
             .y(function(d) { return y(d.intensity); });
 
-    d3.tsv("test-i.out", type_int, function(error, data) {
+    var intensity_filename = "<%=filename%>" + "-i.out";
+    d3.tsv(intensity_filename, type_int, function(error, data) {
         if (error) throw error;
 
         x.domain(d3.extent(data, function(d) { return d.time; }));
@@ -149,25 +150,24 @@
     //formant graph
     var color = d3.scale.category10();
 
+
     var formant_line = d3.svg.line()
             .interpolate("basis")
             .x(function(d) { return x(d.time); })
             .y(function(d) { return y(d.func); });
 
-    d3.tsv("test-f.out", function(error, data) {
+    var formant_filename = "<%=filename%>" + "-f.out";
+    d3.tsv(formant_filename, function(error, data) {
         if (error) throw error;
 
         color.domain(d3.keys(data[0]).filter(function(key) { return key !== "time"; }));
 
-        data.forEach(function(d) {
-            d.time = d.time;
-        });
 
         var funcs = color.domain().map(function(name) {
             return {
                 name: name,
                 values: data.map(function(d) {
-                    return {date: d.time, temperature: +d[name]};
+                    return {time: d.time, func: +d[name]};
                 })
             };
         });
@@ -213,3 +213,5 @@
     });
 
 </script>
+</body>
+</html>

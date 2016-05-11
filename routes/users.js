@@ -106,9 +106,15 @@ router.post('/send-attend', function(req, res, next) {
             dataArr.sort(function(a, b){
                 return b.comp_val - a.comp_val;
             });
+
             console.log('dataArr: ', dataArr);
             console.log('attend person: ', dataArr[0]);
-            cb(null, {resCode: 1, checkResult: dataArr[0], checkDataArr: dataArr});
+
+            //if comp_val is 90 point, success
+            if(dataArr[0].comp_val > 90.0)
+                cb(null, {resCode: 1, checkResult: dataArr[0], checkDataArr: dataArr});
+            else
+                cb('err', {resCode: -1, msg: 'not matched'});
         }
     ],function(err, result){
         if(err){

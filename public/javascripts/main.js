@@ -299,10 +299,17 @@ function checkBtn(){
             buttonBlock(document.getElementById("checkBtn"));
             if(status == "success"){
                 if(data.resCode == 1){
-                    alert("출석 체크 되었습니다. " + data.checkResult.user_name + "님 반갑습니다.");
-                    location.replace("/");  //go to main
+                    //alert("출석 체크 되었습니다. " + data.checkResult.user_name + "님 반갑습니다.");
+                    //location.replace("/");  //go to main
+                    $("#alertModal").find("#modal_text").html("출석 체크 되었습니다. " + data.checkResult.user_name + "님 반갑습니다.");
+                    $("#alertModal").modal();
+                    $("#alertModal").on("hidden.bs.modal", function(){
+                        location.replace("/");  //go to main
+                    });
                 }else{
-                    alert("record again please!");
+                    //alert("record again please!");
+                    $("#alertModal").find("#modal_text").html("소리가 정확하지 않습니다. 다시 한번 시도해주세요.");
+                    $("#alertModal").modal();
                 }
             }else{
                 console.log("status fail");
