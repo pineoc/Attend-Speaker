@@ -76,6 +76,10 @@ router.get('/exec-test', function(req, res, next){
 });
 */
 
+router.get('/get-graph', function(req, res){
+    res.render('d3graph', {title:""});
+});
+
 /*
 * get data parsing
 * @params: fileDir, fileName
@@ -141,16 +145,19 @@ router.get('/get-data', function(req, res){
                     }
                     else{
                         var array = [];
+                        var secondData = [];
                         var dataArr_f2 = [];
                         var dataArr_f3 = [];
                         array = result.toString().split("\r\n");
                         for(var i=0; i< array.length; i++){
                             array[i].toString().replace("\r\n", "");
                             var dataDouble = array[i].toString().split("\t");
+                            secondData.push(dataDouble[0]);
                             dataArr_f2.push(dataDouble[1]);
                             dataArr_f3.push(dataDouble[2]);
                         }
                         var sendData = {
+                            secondData: secondData,
                             pitchData: arg.pitchData,
                             intensityData: arg.intensityData,
                             f2Data: dataArr_f2,
