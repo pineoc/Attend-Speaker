@@ -304,8 +304,14 @@ function checkBtn(){
                     $("#alertModal").find("#modal_text").html("출석 체크 되었습니다. " + data.checkResult.user_name + "님 반갑습니다.");
                     $("#alertModal").modal();
                     $("#alertModal").on("hidden.bs.modal", function(){
-                        location.replace("/");  //go to main
+                        //location.replace("/");  //go to main
                     });
+
+                    //graph iframe src setting
+                    $("#check_graph_1").find("iframe").attr("src", "/get-graph?file=" + data.checkResult.data_file, function ( i, val ) { return val; });
+
+                    $("#check_graph_2").find("iframe").attr("src", "/get-graph?file=" + data.newFile, function ( i, val ) { return val; });
+
                 }else{
                     //alert("record again please!");
                     $("#alertModal").find("#modal_text").html("소리가 정확하지 않습니다. 다시 한번 시도해주세요.");
