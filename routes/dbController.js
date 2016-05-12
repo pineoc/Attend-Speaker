@@ -3,13 +3,9 @@
  */
 
 var mysql = require('mysql');
-var pool = mysql.createPool({
-    host : '127.0.0.1',
-    user : 'root',
-    password : 'root',
-    database : 'attendDB',
-    connectionLimit: 100
-});
+var config = require('./config');
+
+var pool = mysql.createPool(config.dbConfig);
 
 /*
  * Check database status for use MySQL

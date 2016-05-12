@@ -24,3 +24,4 @@ Praat.exe
 *.txt
 *.wav
 sound-data
+routes/config.js
