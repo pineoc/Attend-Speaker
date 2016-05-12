@@ -1,4 +1,5 @@
 .d3graph {
+    display: none;
     position: absolute;
     width: 25%;
     height: 28%;
@@ -7,11 +8,27 @@
 /*check.ejs graphs*/
 
 #check_graph_1{
-    top: 20%;
+    top: 5%;
     left: 1%;
 }
 
 #check_graph_2{
-    top: 50%;
+    top: 35%;
     left: 1%;
+}
+
+#check_corr_rate {
+    display: none;
+    position: absolute;
+    width: 25%;
+    height: 28%;
+    top: 65%;
+    left: 1%;
+    background: white;
+}
+
+#debug_btn {
+    position: absolute;
+    top: 3%;
+    left: 29%;
 }

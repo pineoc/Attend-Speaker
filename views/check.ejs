@@ -44,6 +44,22 @@
     <script src="javascripts/recorder.js"></script>
     <script src="javascripts/main.js"></script>
     <script src="javascripts/audiodisplay.js"></script>
+    <script>
+      var isDebug = false;
+      function debugBtn(){
+        if(isDebug){
+          $(".debug").each(function(idx){
+            $(this).fadeOut();
+          });
+          isDebug = false;
+        } else {
+          $(".debug").each(function(idx){
+            $(this).fadeIn();
+          });
+          isDebug = true;
+        }
+      }
+    </script>
   </head>
 
   <body>
@@ -96,12 +112,14 @@
             </div>
             <!-- /.modal -->
 
-            <div id="check_graph_1" class="d3graph">
+            <div id="check_graph_1" class="d3graph debug">
               <iframe id="graph_test" width="100%" height="100%"></iframe>
             </div>
-            <div id="check_graph_2" class="d3graph">
+            <div id="check_graph_2" class="d3graph debug">
               <iframe id="graph_test" width="100%" height="100%"></iframe>
             </div>
+            <div id="check_corr_rate" class="debug"></div>
+            <button id="debug_btn" type="button" class="btn btn-danger" onclick="debugBtn()">Debug</button>
           </div>
 
         </div>
