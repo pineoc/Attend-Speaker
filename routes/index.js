@@ -47,7 +47,7 @@ router.get('/check-attendance', function(req, res, next) {
 router.get('/get-graph', function(req, res){
     var recvData = req.query;
     var filename = recvData.dirname + "/" + recvData.filename;
-    filename="fm12345678/fm1.wav";
+    //filename="fm12345678/fm1.wav";
     res.render('d3graph', {filename: filename});
 });
 

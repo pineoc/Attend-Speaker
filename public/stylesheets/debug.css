@@ -1,0 +1,17 @@
+.d3graph {
+    position: absolute;
+    width: 25%;
+    height: 28%;
+}
+
+/*check.ejs graphs*/
+
+#check_graph_1{
+    top: 20%;
+    left: 1%;
+}
+
+#check_graph_2{
+    top: 50%;
+    left: 1%;
+}

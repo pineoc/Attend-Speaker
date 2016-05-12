@@ -79,14 +79,15 @@ router.post('/send-attend', function(req, res, next) {
                                     user_name: elem.user_name,
                                     pitch_rate: result.pitch_rate,
                                     int_rate: result.int_rate,
-                                    comp_val: result.pitch_rate * 0.6 + result.int_rate * 0.4
+                                    comp_val: result.pitch_rate * 0.6 + result.int_rate * 0.4,
+                                    data_file: data1
                                 };
                                 corrArr.push(corrObj);
                                 dataCnt--;
 
                                 if(dataCnt === 0){
                                     //end foreach
-                                    cb(null, {data: corrArr});
+                                    cb(null, {data: corrArr, newFile: data2});
                                 }
                             } else {
                                 console.log('compareDatas_attend() error!');
@@ -110,9 +111,12 @@ router.post('/send-attend', function(req, res, next) {
             console.log('dataArr: ', dataArr);
             console.log('attend person: ', dataArr[0]);
 
+            var newFile_name = arg.newFile;
+            newFile_name = newFile_name.substring(__dirname.length + 14);
+
             //if comp_val is 90 point, success
             if(dataArr[0].comp_val > 90.0)
-                cb(null, {resCode: 1, checkResult: dataArr[0], checkDataArr: dataArr});
+                cb(null, {resCode: 1, checkResult: dataArr[0], checkDataArr: dataArr, newFile: newFile_name});
             else
                 cb('err', {resCode: -1, msg: 'not matched'});
         }

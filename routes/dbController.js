@@ -6,7 +6,7 @@ var mysql = require('mysql');
 var pool = mysql.createPool({
     host : '127.0.0.1',
     user : 'root',
-    password : 'qwert123',
+    password : 'root',
     database : 'attendDB',
     connectionLimit: 100
 });
@@ -43,7 +43,7 @@ exports.selectAll = function(tableName, callback){
         if(err)
             callback({resCode: false, data: null, msg: 'getConnection fail, code: ' + err});
         else {
-            conn.query('SELECT * FROM ' + tableName,[],function(err, result){
+            conn.query('SELECT * FROM ' + tableName, [], function(err, result){
                 if(err){
                     callback({resCode: false, data: null, msg: err });
                 } else {
