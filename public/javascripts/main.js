@@ -316,6 +316,11 @@ function checkBtn(){
                     //alert("record again please!");
                     $("#alertModal").find("#modal_text").html("소리가 정확하지 않습니다. 다시 한번 시도해주세요.");
                     $("#alertModal").modal();
+
+                    //graph iframe src setting
+                    $("#check_graph_1").find("iframe").attr("src", "/get-graph?file=" + data.checkResult.data_file, function ( i, val ) { return val; });
+
+                    $("#check_graph_2").find("iframe").attr("src", "/get-graph?file=" + data.newFile, function ( i, val ) { return val; });
                 }
             }else{
                 console.log("status fail");

@@ -129,16 +129,15 @@ exports.compareDatas_attend = function(filename1, filename2, callback){
             var stdout_result = null;
             try{
                 stdout_result = JSON.parse(stdout);
+                callback({
+                    resCode: 1,
+                    msg: 'exec success',
+                    pitch_rate: stdout_result.pitch_rate,
+                    int_rate: stdout_result.int_rate
+                });
             } catch(err){
                 return callback({resCode: -1, msg: 'json parse err'});
             }
-
-            callback({
-                resCode: 1,
-                msg: 'exec success',
-                pitch_rate: stdout_result.pitch_rate,
-                int_rate: stdout_result.int_rate
-            });
         }
     };
     var options = {

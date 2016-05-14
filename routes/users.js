@@ -67,6 +67,7 @@ router.post('/send-attend', function(req, res, next) {
                     var dataArr = result.data;
                     var corrArr = [];
                     var dataCnt = dataArr.length;
+                    var isErr = false;
                     dataArr.forEach(function(elem){
                         var data1 = elem.user_dir + elem.user_name + "1.wav";
                         var data2 = arg.outFileDirPath + "/" + arg.filename;
@@ -87,11 +88,15 @@ router.post('/send-attend', function(req, res, next) {
 
                                 if(dataCnt === 0){
                                     //end foreach
-                                    cb(null, {data: corrArr, newFile: data2});
+                                    if(!isErr)
+                                        cb(null, {data: corrArr, newFile: data2});
+                                    else
+                                        cb('err', {resCode: -1, msg: 'compare_attend err'});
                                 }
                             } else {
                                 console.log('compareDatas_attend() error!');
-                                return cb('err', {resCode: -1, msg: 'compare_attend err'});
+                                isErr = true;
+                                //return cb('err', {resCode: -1, msg: 'compare_attend err'});
                             }
                         });
                     });
@@ -117,8 +122,15 @@ router.post('/send-attend', function(req, res, next) {
             //if comp_val is 90 point, success
             if(dataArr[0].comp_val > 90.0)
                 cb(null, {resCode: 1, checkResult: dataArr[0], checkDataArr: dataArr, newFile: newFile_name});
-            else
-                cb('err', {resCode: -1, msg: 'not matched'});
+            else {
+                //send check result data for debug
+                cb('err', {
+                    resCode: -1,
+                    checkResult: dataArr[0],
+                    checkDataArr: dataArr,
+                    newFile: newFile_name,
+                    msg: 'not matched'});
+            }
         }
     ],function(err, result){
         if(err){
