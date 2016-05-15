@@ -31,6 +31,9 @@
     <!-- Custom styles for this template -->
     <link href="stylesheets/cover.css" rel="stylesheet">
 
+    <!-- Debug styles -->
+    <link href="stylesheets/debug.css" rel="stylesheet">
+
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="javascripts/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="javascripts/ie-emulation-modes-warning.js"></script>
@@ -44,20 +47,25 @@
     <script src="javascripts/main.js"></script>
     <script src="javascripts/audiodisplay.js"></script>
     <script>
-      //button funcs.
-      //button check
-      function btnAgain(){
-        alert("다시 녹음하시겠습니까?");
+      var isDebug = false;
+      function debugBtn(){
+        if(isDebug){
+          $(".debug").each(function(idx){
+            $(this).fadeOut();
+          });
+          isDebug = false;
+        } else {
+          $(".debug").each(function(idx){
+            $(this).fadeIn();
+          });
+          $(".iframe-graph").each(function(idx){
+            $(this).attr("src", $(this).attr("src"));
+          });
+          isDebug = true;
+        }
       }
-
-      //button register
-      function btnRegister(){
-
-      }
-
-
-
     </script>
+
 </head>
 
   <body>
@@ -104,6 +112,39 @@
               <a type="button" id="save" class="btn btn-default btn-lg" style="display:none;">download</a>
             </p>
           </div>
+          <!-- Modal -->
+          <div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true" style="text-shadow: 0 1px 0.5px rgba(0,0,0,.5);">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h3 class="modal-title" id="myModalLabel" style="color:black; font-weight: 700;">출석 체크</h3>
+                </div>
+                <div class="modal-body">
+                  <p id="modal_text" style="color:black; font-weight: 700;"></p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+          <!-- /.modal -->
+
+          <!-- debug divs -->
+          <div id="reg_graph_1" class="d3graph debug">
+            <iframe class="iframe-graph" width="100%" height="100%"></iframe>
+          </div>
+          <div id="reg_graph_2" class="d3graph debug">
+            <iframe class="iframe-graph" width="100%" height="100%"></iframe>
+          </div>
+          <div id="reg_graph_3" class="d3graph debug">
+            <iframe class="iframe-graph" width="100%" height="100%"></iframe>
+          </div>
+          <div id="reg_corr_rate" class="debug"></div>
+          <button id="debug_btn" type="button" class="btn btn-danger" onclick="debugBtn()">Debug</button>
 
         </div>
 

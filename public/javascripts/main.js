@@ -249,19 +249,41 @@ function reqRegiResult(){
             //enable button
             buttonBlock(document.getElementById("regiBtn"));
             if(status == "success"){
+                var user_name = document.getElementById("user_name").value;
+                var user_num = document.getElementById("student_num").value;
                 if(data.resCode == 1){
                     //record&store success
+                    var graph_data_string = "/" + user_name + user_num + "/" + user_name + recNum + ".wav";
+                    //debug graph setting
+                    $("#reg_graph_" + recNum).find("iframe").attr("src", "/get-graph?file=" + graph_data_string, function ( i, val ) { return val; });
                     if(data.msg == "1good"){
                         recNum++; recIndex++;
                     }else if(data.msg == "2good"){
                         recNum++; recIndex++;
                     }else{ //3good
                         recNum=0; recIndex=0;
-                        alert("registration finish");
-                        location.replace("/");  //go to main
+                        $("#alertModal").find("#modal_text").html("등록되셨습니다. " + document.getElementById("user_name").value + "님 반갑습니다.");
+                        $("#alertModal").modal();
+                        $("#alertModal").on("hidden.bs.modal", function(){
+                            //location.replace("/");  //go to main
+                        });
                     }
-                }else{
-                    alert("record again please!");
+                } else {
+                    if(data.msg.indexOf("0bad") !== -1){
+                        //already exist
+                        $("#alertModal").find("#modal_text").html("이미 등록된 사용자입니다.");
+                        $("#alertModal").modal();
+                    } else if(data.msg.indexOf("directory") !== -1 || data.msg.indexOf("write") !== -1) {
+                        //system error
+                        $("#alertModal").find("#modal_text").html("등록 중에 문제가 생겼습니다.<br/>다시 시도해주세요.");
+                        $("#alertModal").modal();
+                    } else {
+                        $("#alertModal").find("#modal_text").html("음성이 앞서 녹음한 데이터와 많이 다릅니다.<br/>다시 한번 시도해주세요.");
+                        $("#alertModal").modal();
+                        var graph_data_string = "/" + user_name + user_num + "/" + user_name + recNum + ".wav";
+                        //debug graph setting
+                        $("#reg_graph_" + recNum).find("iframe").attr("src", "/get-graph?file=" + graph_data_string, function ( i, val ) { return val; });
+                    }
                 }
 
             }else{
@@ -312,6 +334,13 @@ function checkBtn(){
 
                     $("#check_graph_2").find("iframe").attr("src", "/get-graph?file=" + data.newFile, function ( i, val ) { return val; });
 
+                    //data info set to div check_corr_rate
+                    var html_string = "매칭률 : " + data.checkResult.comp_val + "<br/>" +
+                        "intensity rate: " + data.checkResult.int_rate + "<br/>" +
+                        "pitch rate: " + data.checkResult.pitch_rate + "<br/>" +
+                        "user: " + data.checkResult.user_name + "<br/>";
+                    $("#check_corr_rate").html(html_string);
+
                 }else{
                     //alert("record again please!");
                     $("#alertModal").find("#modal_text").html("소리가 정확하지 않습니다. 다시 한번 시도해주세요.");
@@ -321,6 +350,13 @@ function checkBtn(){
                     $("#check_graph_1").find("iframe").attr("src", "/get-graph?file=" + data.checkResult.data_file, function ( i, val ) { return val; });
 
                     $("#check_graph_2").find("iframe").attr("src", "/get-graph?file=" + data.newFile, function ( i, val ) { return val; });
+
+                    //data info set to div check_corr_rate
+                    var html_string = "matching rate : " + data.checkResult.comp_val + "<br/>" +
+                        "intensity rate: " + data.checkResult.int_rate + "<br/>" +
+                        "pitch rate: " + data.checkResult.pitch_rate + "<br/>" +
+                        "user: " + data.checkResult.user_name + "<br/>";
+                    $("#check_corr_rate").html(html_string);
                 }
             }else{
                 console.log("status fail");

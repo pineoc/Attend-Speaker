@@ -178,7 +178,7 @@ router.post('/register', function(req, res, next){
                         console.log("w0 check success");
                         cb(null, {resCode: 1, msg: recvData.recNum + "good, w0 success"});
                     } else {
-                        cb("err", {resCode: -1, msg: recvData.recNum + "bad, already exist"});
+                        cb("err", {resCode: -1, msg: recvData.recNum + "0bad, already exist"});
                     }
                 });
             },

@@ -25,10 +25,43 @@
     top: 65%;
     left: 1%;
     background: white;
+    color: black;
+    padding: 10px;
+    text-align: start;
 }
 
 #debug_btn {
     position: absolute;
     top: 3%;
     left: 29%;
+}
+
+/* register page, record.ejss css*/
+
+#reg_graph_1{
+    top: 5%;
+    left: 1%;
+}
+
+#reg_graph_2{
+    top: 35%;
+    left: 1%;
+}
+
+#reg_graph_3{
+    top: 65%;
+    left: 1%;
+}
+
+#reg_corr_rate {
+    display: none;
+    position: absolute;
+    width: 25%;
+    height: 28%;
+    top: 5%;
+    right: 1%;
+    background: white;
+    color: black;
+    padding: 10px;
+    text-align: start;
 }

@@ -56,6 +56,9 @@
           $(".debug").each(function(idx){
             $(this).fadeIn();
           });
+          $(".iframe-graph").each(function(idx){
+            $(this).attr("src", $(this).attr("src"));
+          });
           isDebug = true;
         }
       }
@@ -113,10 +116,10 @@
             <!-- /.modal -->
 
             <div id="check_graph_1" class="d3graph debug">
-              <iframe id="graph_test" width="100%" height="100%"></iframe>
+              <iframe class="iframe-graph" width="100%" height="100%"></iframe>
             </div>
             <div id="check_graph_2" class="d3graph debug">
-              <iframe id="graph_test" width="100%" height="100%"></iframe>
+              <iframe class="iframe-graph" width="100%" height="100%"></iframe>
             </div>
             <div id="check_corr_rate" class="debug"></div>
             <button id="debug_btn" type="button" class="btn btn-danger" onclick="debugBtn()">Debug</button>
