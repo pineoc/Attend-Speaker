@@ -81,7 +81,7 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
             var isValid = false;
 
             //test standard rate = 70.0
-            if(stdout_result.pitch_rate > 50.0 && stdout_result.int_rate > 50.0)
+            if(stdout_result.pitch_rate > 30.0 && stdout_result.int_rate > 50.0)
                 isValid = true;
 
             callback({

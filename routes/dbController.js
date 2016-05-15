@@ -52,11 +52,11 @@ exports.selectAll = function(tableName, callback){
 };
 
 /*
- * Get data from table selectOne
+ * Get data from table is exist
  * @param: tableName, wherePhrase, params
  * @result: resCode, data(object)
  * */
-exports.selectOne = function(tableName, wherePhrase, params, callback){
+exports.checkExist = function(tableName, wherePhrase, params, callback){
     pool.getConnection(function(err, conn){
         if(err)
             callback({resCode: false, data: null, msg: 'getConnection fail, code: ' + err});
@@ -67,10 +67,8 @@ exports.selectOne = function(tableName, wherePhrase, params, callback){
                 } else {
                     if(result.length === 0){
                         callback({resCode: true, data: result, msg: 'no data'});
-                    } else if(result.length === 1){
-                        callback({resCode: true, data: result});
                     } else {
-                        callback({resCode: false, data: result, msg: '2 more datas'});
+                        callback({resCode: false, data: result, msg: 'exist'});
                     }
                 }
                 conn.release();

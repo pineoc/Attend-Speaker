@@ -173,12 +173,12 @@ router.post('/register', function(req, res, next){
     async.waterfall([
             function(cb){
                 //check if same name
-                dbController.selectOne('T_USER', 'user_name=? AND user_idnum=?', [recvData.personName,  recvData.idNum], function(result){
+                dbController.checkExist('T_USER', 'user_idnum=?', [recvData.idNum], function(result){
                     if(result.resCode){
                         console.log("w0 check success");
                         cb(null, {resCode: 1, msg: recvData.recNum + "good, w0 success"});
                     } else {
-                        cb("err", {resCode: -1, msg: recvData.recNum + "0bad, already exist"});
+                        cb("err", {resCode: -1, msg: "0bad, already exist"});
                     }
                 });
             },
@@ -229,10 +229,10 @@ router.post('/register', function(req, res, next){
                     var user_path = SOUND_DATA_PATH + recvData.personName + recvData.idNum;
                     mkdirp(user_path, function(err){
                         if(err){
-                            console.log('1mkdirp error');
+                            //console.log('1mkdirp error');
                             cb('err', {resCode: -1, msg: "2bad directory error"});
                         } else {
-                            console.log("2mkdirp success");
+                            //console.log("2mkdirp success");
                             praatConnector.makeDatas(arg.saveFileDirPath, arg.filename, user_path, arg.filename, function(resBool){
                                 if(resBool){
                                     //TODO : compare with first datas, if valid data-> next step
@@ -242,19 +242,18 @@ router.post('/register', function(req, res, next){
                                     praatConnector.compareDatas(user_path + "/", filename1, filename2, function(result){
                                         if(result.resCode === 1){
                                             if(result.isValid) {
-                                                cb(null, {resCode: 1, msg: '2good'});
+                                                cb(null, {resCode: 1, msg: '2good', pitch_rate: result.pitch_rate, int_rate: result.int_rate});
                                             } else {
                                                 console.log('data2 isValid : false, values: ', result.pitch_rate, result.int_rate);
-                                                cb('err', {resCode: -1, msg: '2bad'});
+                                                cb('err', {resCode: -1, msg: '2bad', pitch_rate: result.pitch_rate, int_rate: result.int_rate});
                                             }
                                         } else {
                                             console.log('data2 compareDatas() error!');
-                                            cb('err', {resCode: -1, msg: '2bad'});
+                                            cb('err', {resCode: -1, msg: '2bad, system'});
                                         }
                                     });
-                                    //cb(null, {resCode: 1, msg: '2good'});
                                 } else {
-                                    cb('err', {resCode: -1, msg: '2bad'});
+                                    cb('err', {resCode: -1, msg: '2bad, system'});
                                 }
                             });
                         }
@@ -266,7 +265,7 @@ router.post('/register', function(req, res, next){
                             console.log('3mkdirp error');
                             cb('err', {resCode: -1, msg: "3bad directory error"});
                         } else {
-                            console.log("3mkdirp success");
+                            //console.log("3mkdirp success");
                             praatConnector.makeDatas(arg.saveFileDirPath, arg.filename, user_path, arg.filename, function(resBool){
                                 if(resBool){
                                     //TODO : compare with first datas, if valid data-> next step
@@ -276,18 +275,18 @@ router.post('/register', function(req, res, next){
                                     praatConnector.compareDatas(user_path + "/", filename1, filename2, function(result){
                                         if(result.resCode === 1){
                                             if(result.isValid) {
-                                                cb(null, {resCode: 1, msg: '3good'});
+                                                cb(null, {resCode: 1, msg: '3good', pitch_rate: result.pitch_rate, int_rate: result.int_rate});
                                             } else {
                                                 console.log('data3 isValid : false, values: ', result.pitch_rate, result.int_rate);
-                                                cb('err', {resCode: -1, msg: '3bad'});
+                                                cb('err', {resCode: -1, msg: '3bad', pitch_rate: result.pitch_rate, int_rate: result.int_rate});
                                             }
                                         } else {
                                             console.log('data3 compareDatas() error!');
-                                            cb('err', {resCode: -1, msg: '3bad'});
+                                            cb('err', {resCode: -1, msg: '3bad, system'});
                                         }
                                     });
                                 } else {
-                                    cb('err', {resCode: -1, msg: '3bad'});
+                                    cb('err', {resCode: -1, msg: '3bad, system'});
                                 }
                             });
                         }
@@ -309,7 +308,7 @@ router.post('/register', function(req, res, next){
                         }
                     });
                 } else {
-                    cb(null, {resCode: 1, msg: recvData.recNum + 'good'});
+                    cb(null, {resCode: 1, msg: recvData.recNum + 'good', pitch_rate: arg.pitch_rate, int_rate: arg.int_rate});
                 }
             }
         ],
@@ -319,7 +318,7 @@ router.post('/register', function(req, res, next){
                 console.log('err: ', err, 'result: ', result);
                 res.json(result);
             } else {
-                console.log('registration success');
+                //console.log('registration success');
                 res.json(result);
             }
         });

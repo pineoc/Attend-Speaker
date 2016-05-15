@@ -62,6 +62,18 @@ function doneEncoding( blob ) {
 }
 
 function toggleRecording( e ) {
+    //check name, number
+    if(document.getElementById("user_name").value === "" || typeof document.getElementById("user_name").value === 'undefined'){
+        $("#alertModal-reg").find("#modal_text").html("이름을 입력해 주세요.");
+        $("#alertModal-reg").modal();
+        return;
+    }
+    if(document.getElementById("student_num").value === "" || typeof document.getElementById("student_num").value === 'undefined'){
+        $("#alertModal-reg").find("#modal_text").html("학번을 입력해 주세요.");
+        $("#alertModal-reg").modal();
+        return;
+    }
+
     if (e.classList.contains("recording")) {
         // stop recording
         audioRecorder.stop();
@@ -222,6 +234,7 @@ function initAudio() {
 }
 
 function reqRegiResult(){
+
     //disable button
     buttonBlock(document.getElementById("regiBtn"));
 
@@ -258,31 +271,57 @@ function reqRegiResult(){
                     $("#reg_graph_" + recNum).find("iframe").attr("src", "/get-graph?file=" + graph_data_string, function ( i, val ) { return val; });
                     if(data.msg == "1good"){
                         recNum++; recIndex++;
+                        //data info set to div reg_corr_rate
+                        var html_string = "";
+                        $("#reg_corr_rate").html(html_string);
                     }else if(data.msg == "2good"){
                         recNum++; recIndex++;
+
+                        //data info set to div reg_corr_rate
+                        //debug text data, second data information
+                        $("#corr2").remove();
+                        var html_string = "<p id='corr2'>compare 1 vs 2<br/>" +
+                            "pitch rate: " + data.pitch_rate + "<br/>" +
+                            "intensity rate: " + data.int_rate +"<br/>"+
+                            "</p>";
+                        $("#reg_corr_rate").append(html_string);
                     }else{ //3good
                         recNum=0; recIndex=0;
-                        $("#alertModal").find("#modal_text").html("등록되셨습니다. " + document.getElementById("user_name").value + "님 반갑습니다.");
-                        $("#alertModal").modal();
-                        $("#alertModal").on("hidden.bs.modal", function(){
+                        $("#alertModal-reg").find("#modal_text").html("등록되셨습니다. " + document.getElementById("user_name").value + "님 반갑습니다.");
+                        $("#alertModal-reg").modal();
+                        $("#alertModal-reg").on("hidden.bs.modal", function(){
                             //location.replace("/");  //go to main
                         });
+
+                        //debug text data, third data information
+                        $("#corr3").remove();
+                        var html_string = "<p id='corr3'>compare 2 vs 3<br/>" +
+                            "pitch rate: " + data.pitch_rate + "<br/>" +
+                            "intensity rate: " + data.int_rate +"<br/>"+
+                            "</p>";
+                        $("#reg_corr_rate").append(html_string);
                     }
                 } else {
                     if(data.msg.indexOf("0bad") !== -1){
                         //already exist
-                        $("#alertModal").find("#modal_text").html("이미 등록된 사용자입니다.");
-                        $("#alertModal").modal();
-                    } else if(data.msg.indexOf("directory") !== -1 || data.msg.indexOf("write") !== -1) {
+                        $("#alertModal-reg").find("#modal_text").html("이미 등록된 사용자입니다.");
+                        $("#alertModal-reg").modal();
+                    } else if(data.msg.indexOf("directory") !== -1 || data.msg.indexOf("write") !== -1 || data.msg.indexOf("system") !== -1) {
                         //system error
-                        $("#alertModal").find("#modal_text").html("등록 중에 문제가 생겼습니다.<br/>다시 시도해주세요.");
-                        $("#alertModal").modal();
+                        $("#alertModal-reg").find("#modal_text").html("등록 중에 문제가 생겼습니다.<br/>다시 시도해주세요.");
+                        $("#alertModal-reg").modal();
                     } else {
-                        $("#alertModal").find("#modal_text").html("음성이 앞서 녹음한 데이터와 많이 다릅니다.<br/>다시 한번 시도해주세요.");
-                        $("#alertModal").modal();
+                        $("#alertModal-reg").find("#modal_text").html("음성이 앞서 녹음한 데이터와 많이 다릅니다.<br/>다시 한번 시도해주세요.");
+                        $("#alertModal-reg").modal();
                         var graph_data_string = "/" + user_name + user_num + "/" + user_name + recNum + ".wav";
                         //debug graph setting
                         $("#reg_graph_" + recNum).find("iframe").attr("src", "/get-graph?file=" + graph_data_string, function ( i, val ) { return val; });
+                        $('#corr' + recNum).remove();
+                        var html_string = "<p id='corr" + recNum + "'>compare" + (recNum - 1) + " vs " + (recNum) + "<br/>" +
+                            "pitch rate: " + data.pitch_rate + "<br/>" +
+                            "intensity rate: " + data.int_rate +"<br/>"+
+                            "</p>";
+                        $("#reg_corr_rate").append(html_string);
                     }
                 }
 
