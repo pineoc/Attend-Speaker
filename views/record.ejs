@@ -1,165 +1,180 @@
 <!DOCTYPE html>
 <!-- saved from url=(0037)http://bootstrapk.com/examples/cover/ -->
 <html lang="ko">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="http://bootstrapk.com/favicon.ico">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <title>등록</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="http://bootstrapk.com/favicon.ico">
 
-    <style>
-      canvas { 
-    display: inline-block; 
-    background: #202020; 
-    width: 95%;
-    height: 45%;
-    box-shadow: 0px 0px 10px blue;
-  }
+  <title>등록</title>
 
- 
-    </style>
+  <style>
+    canvas {
+      display: inline-block;
+      background: #202020;
+      width: 95%;
+      height: 45%;
+      box-shadow: 0px 0px 10px blue;
+      margin-right: 20px;
+    }
 
-    <!-- Bootstrap core CSS
-    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">-->
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
-    <!-- Custom styles for this template -->
-    <link href="stylesheets/cover.css" rel="stylesheet">
+  </style>
 
-    <!-- Debug styles -->
-    <link href="stylesheets/debug.css" rel="stylesheet">
+  <!-- Bootstrap core CSS
+  <link href="stylesheets/bootstrap.min.css" rel="stylesheet">-->
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="javascripts/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="javascripts/ie-emulation-modes-warning.js"></script>
+  <!-- Custom styles for this template -->
+  <link href="stylesheets/cover.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <script src="javascripts/recorder.js"></script>
-    <script src="javascripts/main.js"></script>
-    <script src="javascripts/audiodisplay.js"></script>
-    <script>
-      var isDebug = false;
-      function debugBtn(){
-        if(isDebug){
-          $(".debug").each(function(idx){
-            $(this).fadeOut();
-          });
-          isDebug = false;
-        } else {
-          $(".debug").each(function(idx){
-            $(this).fadeIn();
-          });
-          $(".iframe-graph").each(function(idx){
-            $(this).attr("src", $(this).attr("src"));
-          });
-          isDebug = true;
-        }
+  <!-- Debug styles -->
+  <link href="stylesheets/debug.css" rel="stylesheet">
+
+  <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+  <!--[if lt IE 9]><script src="javascripts/ie8-responsive-file-warning.js"></script><![endif]-->
+  <script src="javascripts/ie-emulation-modes-warning.js"></script>
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <script src="javascripts/recorder.js"></script>
+  <script src="javascripts/main.js"></script>
+  <script src="javascripts/audiodisplay.js"></script>
+  <script>
+    var isDebug = false;
+    function debugBtn(){
+      if(isDebug){
+        $(".debug").each(function(idx){
+          $(this).fadeOut();
+        });
+        isDebug = false;
+      } else {
+        $(".debug").each(function(idx){
+          $(this).fadeIn();
+        });
+        $(".iframe-graph").each(function(idx){
+          $(this).attr("src", $(this).attr("src"));
+        });
+        isDebug = true;
       }
-    </script>
+    }
+  </script>
 
 </head>
 
-  <body>
+<body>
 
-    <div class="site-wrapper">
+<div class="site-wrapper">
 
-      <div class="site-wrapper-inner">
+  <div class="site-wrapper-inner">
 
-        <div class="cover-container">
+    <div class="cover-container">
 
-          <div class="masthead clearfix">
-            <div class="inner">
-              <h5 class="masthead-brand">Capstone Design</h5>
-              <a class="btn" href="/"><i class="glyphicon glyphicon-home icon-white"></i> Home</a>
-            </div>
-          </div>
+      <div class="masthead clearfix">
+        <div class="inner">
+          <a class="btn" href="/"><i class="glyphicon glyphicon-home icon-white"></i> Home</a>
+        </div>
+      </div>
 
-          <div class="inner cover">
-            <h2 class="cover-heading">음성 등록</h2>
-            <div class="form-group">
-              <label for="usr_name">이름:</label>
-              <input type="text" class="form-control" id="user_name">
-            </div>
-            <div class="form-group">
-              <label for="student_num">학번:</label>
-              <input type="text" class="form-control" id="student_num">
-            </div>
-
-            <p class="lead">아래 문장을 3회 녹음해주세요 <br> OOO(본인 이름)입니다. <br></p>
-
-              <div id="viz">
-                <canvas id="analyser" width="1024" height="80"></canvas>
-                <br><br><br>
-                <canvas id="wavedisplay1" width="1024" height="80"></canvas>
-                <br><br>
-                <canvas id="wavedisplay2" width="1024" height="80"></canvas>
-                <br><br>
-                <canvas id="wavedisplay3" width="1024" height="80"></canvas>
-                <br><br>
-              </div>
-
-            <p>
-              <button type="button" id="regiBtn" class="btn btn-default btn-lg" onclick="toggleRecording(this);">녹음 시작</button>
-              &nbsp&nbsp
-              <a type="button" id="save" class="btn btn-default btn-lg" style="display:none;">download</a>
-            </p>
-            <!-- Modal -->
-            <div class="modal fade" id="alertModal-reg" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true" style="text-shadow: 0 1px 0.5px rgba(0,0,0,.5);">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" id="myModalLabel" style="color:black; font-weight: 700;">출석 체크</h3>
-                  </div>
-                  <div class="modal-body">
-                    <p id="modal_text" style="color:black; font-weight: 700;"></p>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  </div>
-                </div>
-                <!-- /.modal-content -->
-              </div>
-              <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-
-            <!-- debug divs -->
-            <div id="reg_graph_1" class="d3graph debug">
-              <iframe class="iframe-graph" width="100%" height="100%"></iframe>
-            </div>
-            <div id="reg_graph_2" class="d3graph debug">
-              <iframe class="iframe-graph" width="100%" height="100%"></iframe>
-            </div>
-            <div id="reg_graph_3" class="d3graph debug">
-              <iframe class="iframe-graph" width="100%" height="100%"></iframe>
-            </div>
-            <div id="reg_corr_rate" class="debug"></div>
-            <button id="debug_btn" type="button" class="btn btn-danger" onclick="debugBtn()">Debug</button>
-          </div>
-
+      <div class="inner cover">
+        <h2 class="cover-heading">음성 등록</h2>
+        <div class="form-group">
+          <label for="usr_name">이름:</label>
+          <input type="text" class="form-control" id="user_name">
+        </div>
+        <div class="form-group">
+          <label for="student_num">학번:</label>
+          <input type="text" class="form-control" id="student_num">
         </div>
 
+        <p class="lead">아래 문장을 3회 녹음해주세요 <br> OOO(본인 이름)입니다. <br></p>
+
+        <div id="viz">
+          <canvas id="analyser" width="1024" height="200"></canvas>
+          <br><br><br>
+          <div class="btn-group" role="group" style="display: flex;">
+            <canvas id="wavedisplay1" width="1024" height="80"></canvas>
+            <button id="wave1_f" type="button" class="btn btn-danger proc-btns disabled">Fail</button>
+            <button id="wave1_w" type="button" class="btn btn-warning proc-btns disabled">Progress</button>
+            <button id="wave1_s" type="button" class="btn btn-success proc-btns disabled">Good</button>
+          </div>
+          <br><br>
+          <div class="btn-group" role="group" style="display: flex;">
+            <canvas id="wavedisplay2" width="1024" height="80"></canvas>
+            <button id="wave2_f" type="button" class="btn btn-danger proc-btns disabled">Fail</button>
+            <button id="wave2_w" type="button" class="btn btn-warning proc-btns disabled">Progress</button>
+            <button id="wave2_s" type="button" class="btn btn-success proc-btns disabled">Good</button>
+          </div>
+          <br><br>
+          <div class="btn-group" role="group" style="display: flex;">
+            <canvas id="wavedisplay3" width="1024" height="80"></canvas>
+            <button id="wave3_f" type="button" class="btn btn-danger proc-btns disabled">Fail</button>
+            <button id="wave3_w" type="button" class="btn btn-warning proc-btns disabled">Progress</button>
+            <button id="wave3_s" type="button" class="btn btn-success proc-btns disabled">Good</button>
+          </div>
+          <br><br>
+        </div>
+
+        <p>
+          <button type="button" id="regiBtn" class="btn btn-default btn-lg" onclick="toggleRecording(this);">녹음 시작</button>
+          &nbsp&nbsp
+          <a type="button" id="save" class="btn btn-default btn-lg" style="display:none;">download</a>
+        </p>
+        <!-- Modal -->
+        <div class="modal fade" id="alertModal-reg" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true" style="text-shadow: 0 1px 0.5px rgba(0,0,0,.5);">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel" style="color:black; font-weight: 700;">출석 체크</h3>
+              </div>
+              <div class="modal-body">
+                <p id="modal_text" style="color:black; font-weight: 700;"></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <!-- debug divs -->
+        <div id="reg_graph_1" class="d3graph debug">
+          <iframe class="iframe-graph" width="100%" height="100%"></iframe>
+        </div>
+        <div id="reg_graph_2" class="d3graph debug">
+          <iframe class="iframe-graph" width="100%" height="100%"></iframe>
+        </div>
+        <div id="reg_graph_3" class="d3graph debug">
+          <iframe class="iframe-graph" width="100%" height="100%"></iframe>
+        </div>
+        <div id="reg_corr_rate" class="debug"></div>
+        <button id="debug_btn" type="button" class="btn btn-danger" onclick="debugBtn()">Debug</button>
       </div>
 
     </div>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="javascripts/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="javascripts/ie10-viewport-bug-workaround.js"></script>
+  </div>
+
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="javascripts/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="javascripts/ie10-viewport-bug-workaround.js"></script>
 
 </body></html>

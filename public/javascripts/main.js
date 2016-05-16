@@ -250,6 +250,8 @@ function reqRegiResult(){
     };
     blobToBase64(currblob, function(base64){
         //var update = {'blob': base64};
+        //set btns
+        processCheckFunction(recNum, "progress");
         $.post("/users/register",{
             recNum : recNum,
             dataURL : document.getElementById("save").href,
@@ -257,7 +259,6 @@ function reqRegiResult(){
             personName : document.getElementById("user_name").value,
             idNum : document.getElementById("student_num").value
         }, function(data, status){
-            //alert("post success, data " + data + "\nstatus: " + status);
             console.log("data: ", data, "status: ", status);
             //enable button
             buttonBlock(document.getElementById("regiBtn"));
@@ -270,11 +271,18 @@ function reqRegiResult(){
                     //debug graph setting
                     $("#reg_graph_" + recNum).find("iframe").attr("src", "/get-graph?file=" + graph_data_string, function ( i, val ) { return val; });
                     if(data.msg == "1good"){
+                        //set btns
+                        processCheckFunction(recNum, "success");
+
                         recNum++; recIndex++;
                         //data info set to div reg_corr_rate
                         var html_string = "";
                         $("#reg_corr_rate").html(html_string);
+
                     }else if(data.msg == "2good"){
+                        //set btns
+                        processCheckFunction(recNum, "success");
+
                         recNum++; recIndex++;
 
                         //data info set to div reg_corr_rate
@@ -285,12 +293,17 @@ function reqRegiResult(){
                             "intensity rate: " + data.int_rate +"<br/>"+
                             "</p>";
                         $("#reg_corr_rate").append(html_string);
+
                     }else{ //3good
+                        //set btns
+                        processCheckFunction(recNum, "success");
+
                         recNum=0; recIndex=0;
-                        $("#alertModal-reg").find("#modal_text").html("등록되셨습니다. " + document.getElementById("user_name").value + "님 반갑습니다.");
+                        $("#alertModal-reg").find("#modal_text").html("등록되셨습니다. " + document.getElementById("user_name").value + "님 반갑습니다." + "<br/>" +
+                                "메인화면으로 돌아갑니다.");
                         $("#alertModal-reg").modal();
                         $("#alertModal-reg").on("hidden.bs.modal", function(){
-                            //location.replace("/");  //go to main
+                            location.replace("/");  //go to main
                         });
 
                         //debug text data, third data information
@@ -300,6 +313,7 @@ function reqRegiResult(){
                             "intensity rate: " + data.int_rate +"<br/>"+
                             "</p>";
                         $("#reg_corr_rate").append(html_string);
+
                     }
                 } else {
                     if(data.msg.indexOf("0bad") !== -1){
@@ -308,8 +322,15 @@ function reqRegiResult(){
                         $("#alertModal-reg").modal();
                     } else if(data.msg.indexOf("directory") !== -1 || data.msg.indexOf("write") !== -1 || data.msg.indexOf("system") !== -1) {
                         //system error
-                        $("#alertModal-reg").find("#modal_text").html("등록 중에 문제가 생겼습니다.<br/>다시 시도해주세요.");
+                        $("#alertModal-reg").find("#modal_text").html("등록 중에 문제가 생겼습니다.<br/>다시 시도해주세요.(새로고침 됩니다)");
                         $("#alertModal-reg").modal();
+                        $("#alertModal-reg").on("hidden.bs.modal", function(){
+                            location.reload();  //go to main
+                        });
+
+                        //set btns
+                        processCheckFunction(recNum, "fail");
+
                     } else {
                         $("#alertModal-reg").find("#modal_text").html("음성이 앞서 녹음한 데이터와 많이 다릅니다.<br/>다시 한번 시도해주세요.");
                         $("#alertModal-reg").modal();
@@ -322,9 +343,11 @@ function reqRegiResult(){
                             "intensity rate: " + data.int_rate +"<br/>"+
                             "</p>";
                         $("#reg_corr_rate").append(html_string);
+
+                        //set btns
+                        processCheckFunction(recNum, "fail");
                     }
                 }
-
             }else{
                 console.log("status fail");
             }
@@ -403,6 +426,46 @@ function checkBtn(){
             currblob = null;
         });
     });    
+}
+
+function processCheckFunction(idx, state){
+    if(state === "fail"){
+        if($("#wave" + idx + "_f").hasClass("disabled"))
+            $("#wave" + idx + "_f").removeClass("disabled");
+        $("#wave" + idx + "_f").addClass("active");
+
+        if($("#wave" + idx + "_w").hasClass("active"))
+            $("#wave" + idx + "_w").removeClass("active");
+        $("#wave" + idx + "_w").addClass("disabled");
+
+        if($("#wave" + idx + "_s").hasClass("active"))
+            $("#wave" + idx + "_s").removeClass("active");
+        $("#wave" + idx + "_s").addClass("disabled");
+    } else if(state === "progress"){
+        if($("#wave" + idx + "_f").hasClass("active"))
+            $("#wave" + idx + "_f").removeClass("active");
+        $("#wave" + idx + "_f").addClass("disabled");
+
+        if($("#wave" + idx + "_w").hasClass("disabled"))
+            $("#wave" + idx + "_w").removeClass("disabled");
+        $("#wave" + idx + "_w").addClass("active");
+
+        if($("#wave" + idx + "_s").hasClass("active"))
+            $("#wave" + idx + "_s").removeClass("active");
+        $("#wave" + idx + "_s").addClass("disabled");
+    } else if(state === "success"){
+        if($("#wave" + idx + "_f").hasClass("active"))
+            $("#wave" + idx + "_f").removeClass("active");
+        $("#wave" + idx + "_f").addClass("disabled");
+
+        if($("#wave" + idx + "_w").hasClass("active"))
+            $("#wave" + idx + "_w").removeClass("active");
+        $("#wave" + idx + "_w").addClass("disabled");
+
+        if($("#wave" + idx + "_s").hasClass("disabled"))
+            $("#wave" + idx + "_s").removeClass("disabled");
+        $("#wave" + idx + "_s").addClass("active");
+    }
 }
 
 window.addEventListener('load', initAudio );
