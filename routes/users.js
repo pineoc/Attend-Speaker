@@ -120,7 +120,7 @@ router.post('/send-attend', function(req, res, next) {
             newFile_name = newFile_name.substring(__dirname.length + 14);
             dataArr[0].data_file = dataArr[0].data_file.substring(__dirname.length + 14);
             //if comp_val is 90 point, success
-            if(dataArr[0].comp_val > 90.0)
+            if(dataArr[0].comp_val > 80.0)
                 cb(null, {resCode: 1, checkResult: dataArr[0], checkDataArr: dataArr, newFile: newFile_name});
             else {
                 //send check result data for debug
