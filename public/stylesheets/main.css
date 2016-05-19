@@ -1,0 +1,10 @@
+#main-inform {
+    display: block;
+    position: absolute;
+    width: 25%;
+    height:30%;
+    top: 10%;
+    right: 5%;
+    background: rgba(245, 222, 179, 0.2);
+    border: 7px wheat solid;
+}

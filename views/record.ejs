@@ -20,7 +20,15 @@
       width: 95%;
       height: 45%;
       box-shadow: 0px 0px 10px wheat;
-      margin-right: 20px;
+      margin-right: 10px;
+    }
+
+    .wave {
+      width: 70%;
+    }
+
+    .wave-grp {
+      margin-left: 10px;
     }
 
     .reg-label {
@@ -31,8 +39,6 @@
     .reg-form-group {
       margin-top: 20px;
     }
-
-
   </style>
 
   <!-- Bootstrap core CSS
@@ -85,7 +91,7 @@
 
   <div class="site-wrapper-inner">
 
-    <div class="cover-container">
+    <div class="cover-container" style="width:800px;">
 
       <div class="masthead clearfix">
         <div class="inner">
@@ -115,22 +121,22 @@
         <div id="viz">
           <canvas id="analyser" width="1024" height="200"></canvas>
           <br><br><br>
-          <div class="btn-group" role="group" style="display: flex;">
-            <canvas id="wavedisplay1" width="1024" height="80"></canvas>
+          <div class="btn-group wave-grp" role="group" style="display: flex;">
+            <canvas id="wavedisplay1" class="wave" width="1024" height="80"></canvas>
             <button id="wave1_f" type="button" class="btn btn-danger proc-btns disabled">Fail</button>
             <button id="wave1_w" type="button" class="btn btn-warning proc-btns disabled">Progress</button>
             <button id="wave1_s" type="button" class="btn btn-success proc-btns disabled">Good</button>
           </div>
           <br>
-          <div class="btn-group" role="group" style="display: flex;">
-            <canvas id="wavedisplay2" width="1024" height="80"></canvas>
+          <div class="btn-group wave-grp" role="group" style="display: flex;">
+            <canvas id="wavedisplay2" class="wave" width="1024" height="80"></canvas>
             <button id="wave2_f" type="button" class="btn btn-danger proc-btns disabled">Fail</button>
             <button id="wave2_w" type="button" class="btn btn-warning proc-btns disabled">Progress</button>
             <button id="wave2_s" type="button" class="btn btn-success proc-btns disabled">Good</button>
           </div>
           <br>
-          <div class="btn-group" role="group" style="display: flex;">
-            <canvas id="wavedisplay3" width="1024" height="80"></canvas>
+          <div class="btn-group wave-grp" role="group" style="display: flex;">
+            <canvas id="wavedisplay3" class="wave" width="1024" height="80"></canvas>
             <button id="wave3_f" type="button" class="btn btn-danger proc-btns disabled">Fail</button>
             <button id="wave3_w" type="button" class="btn btn-warning proc-btns disabled">Progress</button>
             <button id="wave3_s" type="button" class="btn btn-success proc-btns disabled">Good</button>
@@ -138,7 +144,7 @@
           <br>
         </div>
 
-        <p>
+        <p style="margin-top: 10px;">
           <button type="button" id="regiBtn" class="btn btn-default btn-lg" onclick="toggleRecording(this);">녹음 시작</button>
           &nbsp&nbsp
           <a type="button" id="save" class="btn btn-default btn-lg" style="display:none;">download</a>
@@ -194,7 +200,6 @@
 <script>
   //user_name input text change check function
   $("#user_name").change(function(){
-
     $("#text_name").text($(this).val());
     $("#text_speak").css({
       fontWeight: "500",
