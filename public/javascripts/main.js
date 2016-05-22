@@ -291,6 +291,8 @@ function reqRegiResult(){
                         var html_string = "<p id='corr2'>compare 1 vs 2<br/>" +
                             "pitch rate: " + data.pitch_rate + "<br/>" +
                             "intensity rate: " + data.int_rate +"<br/>"+
+                            "f2 rate: " + data.f2_rate + "<br/>" +
+                            "f3 rate: " + data.f3_rate + "<br/>" +
                             "</p>";
                         $("#reg_corr_rate").append(html_string);
 
@@ -303,7 +305,8 @@ function reqRegiResult(){
                                 "메인화면으로 돌아갑니다.");
                         $("#alertModal-reg").modal();
                         $("#alertModal-reg").on("hidden.bs.modal", function(){
-                            location.replace("/");  //go to main
+                            if($(".debug:visible").length === 0)
+                                location.replace("/");  //go to main
                         });
 
                         //debug text data, third data information
@@ -311,6 +314,8 @@ function reqRegiResult(){
                         var html_string = "<p id='corr3'>compare 2 vs 3<br/>" +
                             "pitch rate: " + data.pitch_rate + "<br/>" +
                             "intensity rate: " + data.int_rate +"<br/>"+
+                            "f2 rate: " + data.f2_rate + "<br/>" +
+                            "f3 rate: " + data.f3_rate + "<br/>" +
                             "</p>";
                         $("#reg_corr_rate").append(html_string);
 
@@ -325,7 +330,8 @@ function reqRegiResult(){
                         $("#alertModal-reg").find("#modal_text").html("등록 중에 문제가 생겼습니다.<br/>다시 시도해주세요.(새로고침 됩니다)");
                         $("#alertModal-reg").modal();
                         $("#alertModal-reg").on("hidden.bs.modal", function(){
-                            location.reload();  //go to main
+                            if($(".debug:visible").length === 0)
+                                location.reload();  //go to main
                         });
 
                         //set btns
@@ -341,6 +347,8 @@ function reqRegiResult(){
                         var html_string = "<p id='corr" + recNum + "'>compare" + (recNum - 1) + " vs " + (recNum) + "<br/>" +
                             "pitch rate: " + data.pitch_rate + "<br/>" +
                             "intensity rate: " + data.int_rate +"<br/>"+
+                            "f2 rate: " + data.f2_rate + "<br/>" +
+                            "f3 rate: " + data.f3_rate + "<br/>" +
                             "</p>";
                         $("#reg_corr_rate").append(html_string);
 
@@ -383,12 +391,11 @@ function checkBtn(){
             buttonBlock(document.getElementById("checkBtn"));
             if(status == "success"){
                 if(data.resCode == 1){
-                    //alert("출석 체크 되었습니다. " + data.checkResult.user_name + "님 반갑습니다.");
-                    //location.replace("/");  //go to main
                     $("#alertModal").find("#modal_text").html("출석 체크 되었습니다. " + data.checkResult.user_name + "님 반갑습니다.");
                     $("#alertModal").modal();
                     $("#alertModal").on("hidden.bs.modal", function(){
-                        //location.replace("/");  //go to main
+                        if($(".debug:visible").length === 0)
+                            location.replace("/");  //go to main
                     });
 
                     //graph iframe src setting
@@ -400,6 +407,8 @@ function checkBtn(){
                     var html_string = "매칭률 : " + data.checkResult.comp_val + "<br/>" +
                         "intensity rate: " + data.checkResult.int_rate + "<br/>" +
                         "pitch rate: " + data.checkResult.pitch_rate + "<br/>" +
+                        "f2 rate: " + data.checkResult.f2_rate + "<br/>" +
+                        "f3 rate: " + data.checkResult.f3_rate + "<br/>" +
                         "user: " + data.checkResult.user_name + "<br/>";
                     $("#check_corr_rate").html(html_string);
 
@@ -417,6 +426,8 @@ function checkBtn(){
                     var html_string = "matching rate : " + data.checkResult.comp_val + "<br/>" +
                         "intensity rate: " + data.checkResult.int_rate + "<br/>" +
                         "pitch rate: " + data.checkResult.pitch_rate + "<br/>" +
+                        "f2 rate: " + data.checkResult.f2_rate + "<br/>" +
+                        "f3 rate: " + data.checkResult.f3_rate + "<br/>" +
                         "user: " + data.checkResult.user_name + "<br/>";
                     $("#check_corr_rate").html(html_string);
                 }

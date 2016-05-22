@@ -59,11 +59,11 @@ exports.makeDatas = function(wavFilePath, wavFilename, dataPath, dataName, callb
  * @params: dataDirPath, filename1, filename2
  * @result:
  * */
-exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
+exports.compareDatas = function(dataDirPath, filename1, filename2, method, callback){
     var child_proc = require('child_process');
 
     //"dev" used for test with compare program
-    var comp_cmd_params = dataDirPath + filename1 + " " + dataDirPath + filename2 + " dev";
+    var comp_cmd_params = dataDirPath + filename1 + " " + dataDirPath + filename2 + " " + method;
 
     var result_cmd = comp_cmd + " " + comp_cmd_params;
 
@@ -80,6 +80,8 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
             var stdout_result = JSON.parse(stdout);
             var isValid = false;
 
+            console.log("compDatas stdout: ", stdout);
+
             //test standard rate = 70.0
             if(stdout_result.pitch_rate > 30.0 && stdout_result.int_rate > 50.0)
                 isValid = true;
@@ -89,6 +91,8 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
                 msg: 'exec success',
                 pitch_rate: stdout_result.pitch_rate,
                 int_rate: stdout_result.int_rate,
+                f2_rate: stdout_result.f2_rate,
+                f3_rate: stdout_result.f3_rate,
                 isValid: isValid
             });
         }
@@ -109,11 +113,11 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, callback){
  * @params: filename1, filename2
  * @result:
  * */
-exports.compareDatas_attend = function(filename1, filename2, callback){
+exports.compareDatas_attend = function(filename1, filename2, method, callback){
     var child_proc = require('child_process');
 
     //"dev" used for test with compare program
-    var comp_cmd_params = filename1 + " " + filename2 + " dev";
+    var comp_cmd_params = filename1 + " " + filename2 + " " + method;
 
     var result_cmd = comp_cmd + " " + comp_cmd_params;
 
@@ -133,7 +137,9 @@ exports.compareDatas_attend = function(filename1, filename2, callback){
                     resCode: 1,
                     msg: 'exec success',
                     pitch_rate: stdout_result.pitch_rate,
-                    int_rate: stdout_result.int_rate
+                    int_rate: stdout_result.int_rate,
+                    f2_rate: stdout_result.f2_rate,
+                    f3_rate: stdout_result.f3_rate
                 });
             } catch(err){
                 return callback({resCode: -1, msg: 'json parse err'});
@@ -147,6 +153,7 @@ exports.compareDatas_attend = function(filename1, filename2, callback){
         cwd: comp_dir,
         env: process.env
     };
+
     //execute
     child_proc.exec(result_cmd, options, exec_callback);
 };

@@ -72,7 +72,7 @@ router.post('/send-attend', function(req, res, next) {
                         var data1 = elem.user_dir + elem.user_name + "1.wav";
                         var data2 = arg.outFileDirPath + "/" + arg.filename;
                         //console.log("data1: ", data1, "data2: ", data2);
-                        praatConnector.compareDatas_attend(data1, data2, function(result){
+                        praatConnector.compareDatas_attend(data1, data2, "dev", function(result){
                             if(result.resCode === 1){
                                 //console.log("pitch_rate", elem.pitch_rate, "int_rate", elem.int_rate);
                                 var corrObj = {
@@ -239,13 +239,27 @@ router.post('/register', function(req, res, next){
                                     //      not valid, cb('err', {resCode: -1, msg: '2bad'});
                                     var filename1 = arg.filename;
                                     var filename2 = recvData.personName.toString() + (recvData.recNum - 1).toString() + ".wav";
-                                    praatConnector.compareDatas(user_path + "/", filename1, filename2, function(result){
+                                    praatConnector.compareDatas(user_path + "/", filename1, filename2, "dev", function(result){
                                         if(result.resCode === 1){
                                             if(result.isValid) {
-                                                cb(null, {resCode: 1, msg: '2good', pitch_rate: result.pitch_rate, int_rate: result.int_rate});
+                                                cb(null, {
+                                                    resCode: 1,
+                                                    msg: '2good',
+                                                    pitch_rate: result.pitch_rate,
+                                                    int_rate: result.int_rate,
+                                                    f2_rate: result.f2_rate,
+                                                    f3_rate: result.f3_rate
+                                                });
                                             } else {
                                                 console.log('data2 isValid : false, values: ', result.pitch_rate, result.int_rate);
-                                                cb('err', {resCode: -1, msg: '2bad', pitch_rate: result.pitch_rate, int_rate: result.int_rate});
+                                                cb('err', {
+                                                    resCode: -1,
+                                                    msg: '2bad',
+                                                    pitch_rate: result.pitch_rate,
+                                                    int_rate: result.int_rate,
+                                                    f2_rate: result.f2_rate,
+                                                    f3_rate: result.f3_rate
+                                                });
                                             }
                                         } else {
                                             console.log('data2 compareDatas() error!');
@@ -272,13 +286,27 @@ router.post('/register', function(req, res, next){
                                     //      not valid, cb('err', {resCode: -1, msg: '3bad'});
                                     var filename1 = arg.filename;
                                     var filename2 = recvData.personName.toString() + (recvData.recNum - 1).toString() + ".wav";
-                                    praatConnector.compareDatas(user_path + "/", filename1, filename2, function(result){
+                                    praatConnector.compareDatas(user_path + "/", filename1, filename2, "dev", function(result){
                                         if(result.resCode === 1){
                                             if(result.isValid) {
-                                                cb(null, {resCode: 1, msg: '3good', pitch_rate: result.pitch_rate, int_rate: result.int_rate});
+                                                cb(null, {
+                                                    resCode: 1,
+                                                    msg: '3good',
+                                                    pitch_rate: result.pitch_rate,
+                                                    int_rate: result.int_rate,
+                                                    f2_rate: result.f2_rate,
+                                                    f3_rate: result.f3_rate
+                                                });
                                             } else {
                                                 console.log('data3 isValid : false, values: ', result.pitch_rate, result.int_rate);
-                                                cb('err', {resCode: -1, msg: '3bad', pitch_rate: result.pitch_rate, int_rate: result.int_rate});
+                                                cb('err', {
+                                                    resCode: -1,
+                                                    msg: '3bad',
+                                                    pitch_rate: result.pitch_rate,
+                                                    int_rate: result.int_rate,
+                                                    f2_rate: result.f2_rate,
+                                                    f3_rate: result.f3_rate
+                                                });
                                             }
                                         } else {
                                             console.log('data3 compareDatas() error!');
@@ -300,7 +328,14 @@ router.post('/register', function(req, res, next){
                     //insert user
                     dbController.insertOneUser([user_path, recvData.personName, recvData.idNum],function(result){
                         if(result.resCode){
-                            cb(null, {resCode: 1, msg: "user insert success"});
+                            cb(null, {
+                                resCode: 1,
+                                msg: "user insert success",
+                                pitch_rate: arg.pitch_rate,
+                                int_rate: arg.int_rate,
+                                f2_rate: arg.f2_rate,
+                                f3_rate: arg.f3_rate
+                            });
                         } else {
                             //error on db insert
                             console.log("user insert error msg: ", result.msg);
@@ -308,7 +343,14 @@ router.post('/register', function(req, res, next){
                         }
                     });
                 } else {
-                    cb(null, {resCode: 1, msg: recvData.recNum + 'good', pitch_rate: arg.pitch_rate, int_rate: arg.int_rate});
+                    cb(null, {
+                        resCode: 1,
+                        msg: recvData.recNum + 'good',
+                        pitch_rate: arg.pitch_rate,
+                        int_rate: arg.int_rate,
+                        f2_rate: arg.f2_rate,
+                        f3_rate: arg.f3_rate
+                    });
                 }
             }
         ],
