@@ -366,4 +366,184 @@ router.post('/register', function(req, res, next){
         });
 });
 
+//get test data
+//test algorithms raw, cosine, median-cosine, block-parsing + cosine
+//@param: null
+//@result: raw:float, cosine:float, median-cosine:float, block-cosine:float
+router.get('/user-test', function(req, res) {
+    //test datas
+    var test_data_lys_true = __dirname + "/../sound-data/trueLYS11111114/trueLYS1.wav";
+    var test_data_lys_false = __dirname + "/../sound-data/falseLYS11111113/falseLYS1.wav";
+    var test_data_ljy_true = __dirname + "/../sound-data/trueLJY11111111/trueLJY1.wav";
+    var test_data_ljy_false = __dirname + "/../sound-data/falseLJY11111112/falseLJY1.wav";
+
+    //result datas
+    var raw_res = 0;
+    var cosine_res = 0;
+    var med_cosine_res = 0;
+    var block_cosine_res = 0;
+
+    async.waterfall([
+        function(cb){
+            //raw
+            testCompareDatas(test_data_lys_true, 'raw', function(res){
+                if(res === 1 && res.user_name == "이윤석"){
+                    raw_res += 1;
+                    console.log('raw true');
+                } else {
+
+                }
+                testCompareDatas(test_data_ljy_true, 'raw', function(res){
+                    if(res === 1 && res.user_name == "이지윤"){
+                        raw_res += 1;
+                        console.log('raw true');
+                    }
+                    testCompareDatas(test_data_ljy_false, 'raw', function(res){
+                        if(res === 1 && res.user_name != "이지윤"){
+                            raw_res += 1;
+                            console.log('raw true');
+                        }
+                        testCompareDatas(test_data_lys_false, 'raw', function(res){
+                            if(res === 1 && res.user_name != "이윤석"){
+                                raw_res += 1;
+                                console.log('raw true');
+                            }
+                            cb(null,{});
+                        });
+                    });
+                });
+            });
+        }, function(arg, cb){
+            //cosine
+            testCompareDatas(test_data_lys_true, 'cosine', function(res){
+                if(res === 1 && res.user_name == "이윤석"){
+                    cosine_res += 1;
+                }
+                testCompareDatas(test_data_ljy_true, 'cosine', function(res){
+                    if(res === 1 && res.user_name == "이지윤"){
+                        cosine_res += 1;
+                    }
+                    testCompareDatas(test_data_ljy_false, 'cosine', function(res){
+                        if(res === 1 && res.user_name != "이지윤"){
+                            cosine_res += 1;
+                        }
+                        testCompareDatas(test_data_lys_false, 'cosine', function(res){
+                            if(res === 1 && res.user_name != "이윤석"){
+                                cosine_res += 1;
+                            }
+                            cb(null,{});
+                        });
+                    });
+                });
+            });
+        }, function(arg, cb){
+            //med-cosine
+            testCompareDatas(test_data_lys_true, 'median', function(res){
+                if(res === 1 && res.user_name == "이윤석"){
+                    med_cosine_res += 1;
+                }
+                testCompareDatas(test_data_ljy_true, 'median', function(res){
+                    if(res === 1 && res.user_name == "이지윤"){
+                        med_cosine_res += 1;
+                    }
+                    testCompareDatas(test_data_ljy_false, 'median', function(res){
+                        if(res === 1 && res.user_name != "이지윤"){
+                            med_cosine_res += 1;
+                        }
+                        testCompareDatas(test_data_lys_false, 'median', function(res){
+                            if(res === 1 && res.user_name != "이윤석"){
+                                med_cosine_res += 1;
+                            }
+                            cb(null,{});
+                        });
+                    });
+                });
+            });
+        }, function(arg, cb){
+            //cosine
+            testCompareDatas(test_data_lys_true, 'block_cosine', function(res){
+                if(res === 1 && res.user_name == "이윤석"){
+                    block_cosine_res += 1;
+                }
+                testCompareDatas(test_data_ljy_true, 'block_cosine', function(res){
+                    if(res === 1 && res.user_name == "이지윤"){
+                        block_cosine_res += 1;
+                    }
+                    testCompareDatas(test_data_ljy_false, 'block_cosine', function(res){
+                        if(res === 1 && res.user_name != "이지윤"){
+                            block_cosine_res += 1;
+                        }
+                        testCompareDatas(test_data_lys_false, 'block_cosine', function(res){
+                            if(res === 1 && res.user_name != "이윤석"){
+                                block_cosine_res += 1;
+                            }
+                            cb(null,{});
+                        });
+                    });
+                });
+            });
+        }
+    ], function(err, result){
+        if(err) {
+            console.log('waterfall err');
+        } else {
+            res.send({
+                raw_rate: raw_res / 4.0,
+                cosine_rate: cosine_res / 4.0,
+                median_rate: med_cosine_res / 4.0,
+                block_rate: block_cosine_res / 4.0
+            });
+        }
+    });
+
+    function testCompareDatas(data, method, cb){
+        dbController.selectAll('T_USER', function (result) {
+            if (result.resCode) {
+                var dataArr = result.data;
+                var corrArr = [];
+                var dataCnt = dataArr.length;
+                var isErr = false;
+                dataArr.forEach(function (elem) {
+                    var data1 = elem.user_dir + elem.user_name + "1.wav";
+                    var data2 = data;
+                    praatConnector.compareDatas_attend(data1, data2, method, function (result) {
+                        if (result.resCode === 1) {
+                            //console.log("pitch_rate", elem.pitch_rate, "int_rate", elem.int_rate);
+                            var corrObj = {
+                                user_idx: elem.user_idx,
+                                user_name: elem.user_name,
+                                pitch_rate: result.pitch_rate,
+                                int_rate: result.int_rate,
+                                comp_val: result.pitch_rate * 0.6 + result.int_rate * 0.4
+                            };
+                            corrArr.push(corrObj);
+                            dataCnt--;
+
+                            if (dataCnt === 0) {
+                                //end foreach
+                                if (!isErr){
+                                    corrArr.sort(function(a, b){
+                                        return b.comp_val - a.comp_val;
+                                    });
+                                    console.log(method + " attend_name: ", corrArr[0].user_name, "rate: ", corrArr[0].comp_val);
+                                    cb({resCode: 1, attend_name: corrArr[0].user_name});
+                                }
+                                else
+                                    cb({resCode: -1, msg: 'dataCompare() err'});
+                            }
+                        } else {
+                            console.log('compareDatas_attend() error!');
+                            isErr = true;
+                        }
+                    });
+                });
+            } else {
+                //select error
+                cb('err', {resCode: -1, msg: 'SelectAll err'});
+            }
+        });
+    }
+
+
+});
 module.exports = router;
