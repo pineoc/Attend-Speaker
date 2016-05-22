@@ -121,7 +121,6 @@ exports.compareDatas_attend = function(filename1, filename2, method, callback){
 
     var result_cmd = comp_cmd + " " + comp_cmd_params;
 
-    //console.log('result_cmd: ', result_cmd);
     var exec_callback = function(err, stdout, stderr){
         if(err){
             callback({
@@ -137,11 +136,13 @@ exports.compareDatas_attend = function(filename1, filename2, method, callback){
                     resCode: 1,
                     msg: 'exec success',
                     pitch_rate: stdout_result.pitch_rate,
+                    pitch_avg: stdout_result.pitch_avg,
                     int_rate: stdout_result.int_rate,
                     f2_rate: stdout_result.f2_rate,
                     f3_rate: stdout_result.f3_rate
                 });
             } catch(err){
+                console.log('compareDatas_attend() err: ', err);
                 return callback({resCode: -1, msg: 'json parse err'});
             }
         }

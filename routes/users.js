@@ -384,103 +384,117 @@ router.get('/user-test', function(req, res) {
     var block_cosine_res = 0;
 
     async.waterfall([
+        //raw test functions
         function(cb){
-            //raw
             testCompareDatas(test_data_lys_true, 'raw', function(res){
-                if(res === 1 && res.user_name == "이윤석"){
+                if(res.resCode === 1 && res.user_name == "이윤석"){
                     raw_res += 1;
-                    console.log('raw true');
-                } else {
-
                 }
-                testCompareDatas(test_data_ljy_true, 'raw', function(res){
-                    if(res === 1 && res.user_name == "이지윤"){
-                        raw_res += 1;
-                        console.log('raw true');
-                    }
-                    testCompareDatas(test_data_ljy_false, 'raw', function(res){
-                        if(res === 1 && res.user_name != "이지윤"){
-                            raw_res += 1;
-                            console.log('raw true');
-                        }
-                        testCompareDatas(test_data_lys_false, 'raw', function(res){
-                            if(res === 1 && res.user_name != "이윤석"){
-                                raw_res += 1;
-                                console.log('raw true');
-                            }
-                            cb(null,{});
-                        });
-                    });
-                });
+                cb(null);
             });
-        }, function(arg, cb){
-            //cosine
+        }, function(cb){
+            testCompareDatas(test_data_ljy_true, 'raw', function(res) {
+                if (res.resCode === 1 && res.user_name == "이지윤") {
+                    raw_res += 1;
+                }
+                cb(null);
+            });
+        }, function(cb){
+            testCompareDatas(test_data_ljy_false, 'raw', function(res){
+                if(res.resCode == -1)
+                    raw_res += 1;
+                cb(null);
+            });
+        }, function(cb){
+            testCompareDatas(test_data_lys_false, 'raw', function(res){
+                if(res.resCode == -1)
+                    raw_res += 1;
+                cb(null);
+            });
+        },
+        //cosine
+        function(cb){
             testCompareDatas(test_data_lys_true, 'cosine', function(res){
-                if(res === 1 && res.user_name == "이윤석"){
+                console.log(res);
+                if(res.resCode === 1 && res.user_name == "이윤석"){
                     cosine_res += 1;
                 }
-                testCompareDatas(test_data_ljy_true, 'cosine', function(res){
-                    if(res === 1 && res.user_name == "이지윤"){
-                        cosine_res += 1;
-                    }
-                    testCompareDatas(test_data_ljy_false, 'cosine', function(res){
-                        if(res === 1 && res.user_name != "이지윤"){
-                            cosine_res += 1;
-                        }
-                        testCompareDatas(test_data_lys_false, 'cosine', function(res){
-                            if(res === 1 && res.user_name != "이윤석"){
-                                cosine_res += 1;
-                            }
-                            cb(null,{});
-                        });
-                    });
-                });
+                cb(null);
             });
-        }, function(arg, cb){
-            //med-cosine
+        }, function(cb){
+            testCompareDatas(test_data_ljy_true, 'cosine', function(res) {
+                if (res.resCode === 1 && res.user_name == "이지윤") {
+                    cosine_res += 1;
+                }
+                cb(null);
+            });
+        }, function(cb){
+            testCompareDatas(test_data_ljy_false, 'cosine', function(res){
+                if(res.resCode == -1)
+                    cosine_res += 1;
+                cb(null);
+            });
+        }, function(cb){
+            testCompareDatas(test_data_lys_false, 'cosine', function(res){
+                if(res.resCode == -1)
+                    cosine_res += 1;
+                cb(null);
+            });
+        },
+        //median
+        function(cb){
             testCompareDatas(test_data_lys_true, 'median', function(res){
-                if(res === 1 && res.user_name == "이윤석"){
+                if(res.resCode === 1 && res.user_name == "이윤석"){
                     med_cosine_res += 1;
                 }
-                testCompareDatas(test_data_ljy_true, 'median', function(res){
-                    if(res === 1 && res.user_name == "이지윤"){
-                        med_cosine_res += 1;
-                    }
-                    testCompareDatas(test_data_ljy_false, 'median', function(res){
-                        if(res === 1 && res.user_name != "이지윤"){
-                            med_cosine_res += 1;
-                        }
-                        testCompareDatas(test_data_lys_false, 'median', function(res){
-                            if(res === 1 && res.user_name != "이윤석"){
-                                med_cosine_res += 1;
-                            }
-                            cb(null,{});
-                        });
-                    });
-                });
+                cb(null);
             });
-        }, function(arg, cb){
-            //cosine
+        }, function(cb){
+            testCompareDatas(test_data_ljy_true, 'median', function(res) {
+                if (res.resCode === 1 && res.user_name == "이지윤") {
+                    med_cosine_res += 1;
+                }
+                cb(null);
+            });
+        }, function(cb){
+            testCompareDatas(test_data_ljy_false, 'median', function(res){
+                if(res.resCode == -1)
+                    med_cosine_res += 1;
+                cb(null);
+            });
+        }, function(cb){
+            testCompareDatas(test_data_lys_false, 'median', function(res){
+                if(res.resCode == -1)
+                    med_cosine_res += 1;
+                cb(null);
+            });
+        },
+        //block similarity, block_cosine
+        function(cb){
             testCompareDatas(test_data_lys_true, 'block_cosine', function(res){
-                if(res === 1 && res.user_name == "이윤석"){
+                if(res.resCode === 1 && res.user_name == "이윤석"){
                     block_cosine_res += 1;
                 }
-                testCompareDatas(test_data_ljy_true, 'block_cosine', function(res){
-                    if(res === 1 && res.user_name == "이지윤"){
-                        block_cosine_res += 1;
-                    }
-                    testCompareDatas(test_data_ljy_false, 'block_cosine', function(res){
-                        if(res === 1 && res.user_name != "이지윤"){
-                            block_cosine_res += 1;
-                        }
-                        testCompareDatas(test_data_lys_false, 'block_cosine', function(res){
-                            if(res === 1 && res.user_name != "이윤석"){
-                                block_cosine_res += 1;
-                            }
-                            cb(null,{});
-                        });
-                    });
-                });
+                cb(null);
+            });
+        }, function(cb){
+            testCompareDatas(test_data_ljy_true, 'block_cosine', function(res) {
+                if (res.resCode === 1 && res.user_name == "이지윤") {
+                    block_cosine_res += 1;
+                }
+                cb(null);
+            });
+        }, function(cb){
+            testCompareDatas(test_data_ljy_false, 'block_cosine', function(res){
+                if(res.resCode == -1)
+                    block_cosine_res += 1;
+                cb(null);
+            });
+        }, function(cb){
+            testCompareDatas(test_data_lys_false, 'block_cosine', function(res){
+                if(res.resCode == -1)
+                    block_cosine_res += 1;
+                cb(null);
             });
         }
     ], function(err, result){
@@ -504,7 +518,7 @@ router.get('/user-test', function(req, res) {
                 var dataCnt = dataArr.length;
                 var isErr = false;
                 dataArr.forEach(function (elem) {
-                    var data1 = elem.user_dir + elem.user_name + "1.wav";
+                    var data1 = elem.user_dir + elem.user_name + "3.wav";
                     var data2 = data;
                     praatConnector.compareDatas_attend(data1, data2, method, function (result) {
                         if (result.resCode === 1) {
@@ -514,7 +528,10 @@ router.get('/user-test', function(req, res) {
                                 user_name: elem.user_name,
                                 pitch_rate: result.pitch_rate,
                                 int_rate: result.int_rate,
-                                comp_val: result.pitch_rate * 0.6 + result.int_rate * 0.4
+                                comp_val: result.pitch_rate * 0.6 + result.int_rate * 0.4,
+                                f2_rate: result.f2_rate,
+                                f3_rate: result.f3_rate,
+                                pitch_avg: result.pitch_avg
                             };
                             corrArr.push(corrObj);
                             dataCnt--;
@@ -525,11 +542,14 @@ router.get('/user-test', function(req, res) {
                                     corrArr.sort(function(a, b){
                                         return b.comp_val - a.comp_val;
                                     });
-                                    console.log(method + " attend_name: ", corrArr[0].user_name, "rate: ", corrArr[0].comp_val);
-                                    cb({resCode: 1, attend_name: corrArr[0].user_name});
+                                    console.log(method + " attend_name: ", corrArr[0].user_name, "datas: ", corrArr[0]);
+                                    if(corrArr[0].comp_val > 80 && corrArr[0].pitch_avg > 80)
+                                        cb({resCode: 1, attend_name: corrArr[0].user_name});
+                                    else
+                                        cb({resCode: -1});
                                 }
                                 else
-                                    cb({resCode: -1, msg: 'dataCompare() err'});
+                                    cb({resCode: -1, msg: 'dataCompare() err: ' + result.msg});
                             }
                         } else {
                             console.log('compareDatas_attend() error!');
