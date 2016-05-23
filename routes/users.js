@@ -72,7 +72,7 @@ router.post('/send-attend', function(req, res, next) {
                         var data1 = elem.user_dir + elem.user_name + "1.wav";
                         var data2 = arg.outFileDirPath + "/" + arg.filename;
                         //console.log("data1: ", data1, "data2: ", data2);
-                        praatConnector.compareDatas_attend(data1, data2, "dev", function(result){
+                        praatConnector.compareDatas_attend(data1, data2, "block_cosine", function(result){
                             if(result.resCode === 1){
                                 //console.log("pitch_rate", elem.pitch_rate, "int_rate", elem.int_rate);
                                 var corrObj = {
@@ -81,6 +81,8 @@ router.post('/send-attend', function(req, res, next) {
                                     pitch_rate: result.pitch_rate,
                                     int_rate: result.int_rate,
                                     comp_val: result.pitch_rate * 0.6 + result.int_rate * 0.4,
+                                    f2_rate: result.f2_rate,
+                                    f3_rate: result.f3_rate,
                                     data_file: data1
                                 };
                                 corrArr.push(corrObj);
