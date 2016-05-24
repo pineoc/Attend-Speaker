@@ -293,6 +293,7 @@ function reqRegiResult(){
                             "intensity rate: " + data.int_rate +"<br/>"+
                             "f2 rate: " + data.f2_rate + "<br/>" +
                             "f3 rate: " + data.f3_rate + "<br/>" +
+                            "pitch avg rate: " + data.pitch_avg + "<br/>" +
                             "</p>";
                         $("#reg_corr_rate").append(html_string);
 
@@ -316,6 +317,7 @@ function reqRegiResult(){
                             "intensity rate: " + data.int_rate +"<br/>"+
                             "f2 rate: " + data.f2_rate + "<br/>" +
                             "f3 rate: " + data.f3_rate + "<br/>" +
+                            "pitch avg rate: " + data.pitch_avg + "<br/>" +
                             "</p>";
                         $("#reg_corr_rate").append(html_string);
 
@@ -349,6 +351,7 @@ function reqRegiResult(){
                             "intensity rate: " + data.int_rate +"<br/>"+
                             "f2 rate: " + data.f2_rate + "<br/>" +
                             "f3 rate: " + data.f3_rate + "<br/>" +
+                            "pitch avg rate: " + data.pitch_avg + "<br/>" +
                             "</p>";
                         $("#reg_corr_rate").append(html_string);
 

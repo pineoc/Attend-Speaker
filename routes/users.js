@@ -35,7 +35,7 @@ router.post('/send-attend', function(req, res, next) {
             //TODO 2: file save to tmp dir, get path
             var buff = new Buffer(recvData.blobData, 'base64');
             var dateVal = new Date().getTime();
-            var saveFilePath = __dirname + "/../sound-data/tmp/" + dateVal + ".wav";
+            var saveFilePath = __dirname + "/../sound-data/tmp/" + dateVal + "t.wav";
 
             fs.writeFile(saveFilePath, buff, function(err){
                 if(err){
@@ -43,7 +43,7 @@ router.post('/send-attend', function(req, res, next) {
                     cb('err', {resCode: -1, msg: "attend bad, write file error"});
                 } else {
                     console.log('attend, w1 write file success');
-                    var filename = dateVal + ".wav";
+                    var filename = dateVal + "t.wav";
                     var saveFileDirPath = __dirname + "/../sound-data/tmp";
                     var outFileDirPath = __dirname + "/../sound-data/tmp/data";
                     praatConnector.makeDatas(saveFileDirPath + "/", filename, outFileDirPath, filename, function(resBool){
@@ -69,9 +69,9 @@ router.post('/send-attend', function(req, res, next) {
                     var dataCnt = dataArr.length;
                     var isErr = false;
                     dataArr.forEach(function(elem){
-                        var data1 = elem.user_dir + elem.user_name + "1.wav";
+                        var data1 = elem.user_dir + elem.user_name + "3.wav";
                         var data2 = arg.outFileDirPath + "/" + arg.filename;
-                        //console.log("data1: ", data1, "data2: ", data2);
+                        console.log("data1: ", data1, "data2: ", data2);
                         praatConnector.compareDatas_attend(data1, data2, "block_cosine", function(result){
                             if(result.resCode === 1){
                                 //console.log("pitch_rate", elem.pitch_rate, "int_rate", elem.int_rate);
@@ -208,7 +208,7 @@ router.post('/register', function(req, res, next){
                 //TODO 3: check recNum, if num==1 (just save data)
                 //          if num==2 (compare with first data, return result)
                 //          if num==3 (compare with second data, return result, insert to db or not)
-                console.log("w2 start, arg: ", arg, recvData.recNum);
+                //console.log("w2 start, arg: ", arg, recvData.recNum);
                 var recNum = parseInt(recvData.recNum);
                 if(recNum === 1) {
                     var user_path = SOUND_DATA_PATH + recvData.personName + recvData.idNum;
@@ -241,7 +241,7 @@ router.post('/register', function(req, res, next){
                                     //      not valid, cb('err', {resCode: -1, msg: '2bad'});
                                     var filename1 = arg.filename;
                                     var filename2 = recvData.personName.toString() + (recvData.recNum - 1).toString() + ".wav";
-                                    praatConnector.compareDatas(user_path + "/", filename1, filename2, "dev", function(result){
+                                    praatConnector.compareDatas(user_path + "/", filename1, filename2, "block_cosine", function(result){
                                         if(result.resCode === 1){
                                             if(result.isValid) {
                                                 cb(null, {
@@ -250,7 +250,8 @@ router.post('/register', function(req, res, next){
                                                     pitch_rate: result.pitch_rate,
                                                     int_rate: result.int_rate,
                                                     f2_rate: result.f2_rate,
-                                                    f3_rate: result.f3_rate
+                                                    f3_rate: result.f3_rate,
+                                                    pitch_avg: result.pitch_avg
                                                 });
                                             } else {
                                                 console.log('data2 isValid : false, values: ', result.pitch_rate, result.int_rate);
@@ -260,7 +261,8 @@ router.post('/register', function(req, res, next){
                                                     pitch_rate: result.pitch_rate,
                                                     int_rate: result.int_rate,
                                                     f2_rate: result.f2_rate,
-                                                    f3_rate: result.f3_rate
+                                                    f3_rate: result.f3_rate,
+                                                    pitch_avg: result.pitch_avg
                                                 });
                                             }
                                         } else {
@@ -288,7 +290,7 @@ router.post('/register', function(req, res, next){
                                     //      not valid, cb('err', {resCode: -1, msg: '3bad'});
                                     var filename1 = arg.filename;
                                     var filename2 = recvData.personName.toString() + (recvData.recNum - 1).toString() + ".wav";
-                                    praatConnector.compareDatas(user_path + "/", filename1, filename2, "dev", function(result){
+                                    praatConnector.compareDatas(user_path + "/", filename1, filename2, "block_cosine", function(result){
                                         if(result.resCode === 1){
                                             if(result.isValid) {
                                                 cb(null, {
@@ -297,7 +299,8 @@ router.post('/register', function(req, res, next){
                                                     pitch_rate: result.pitch_rate,
                                                     int_rate: result.int_rate,
                                                     f2_rate: result.f2_rate,
-                                                    f3_rate: result.f3_rate
+                                                    f3_rate: result.f3_rate,
+                                                    pitch_avg: result.pitch_avg
                                                 });
                                             } else {
                                                 console.log('data3 isValid : false, values: ', result.pitch_rate, result.int_rate);
@@ -307,7 +310,8 @@ router.post('/register', function(req, res, next){
                                                     pitch_rate: result.pitch_rate,
                                                     int_rate: result.int_rate,
                                                     f2_rate: result.f2_rate,
-                                                    f3_rate: result.f3_rate
+                                                    f3_rate: result.f3_rate,
+                                                    pitch_avg: result.pitch_avg
                                                 });
                                             }
                                         } else {
@@ -336,7 +340,8 @@ router.post('/register', function(req, res, next){
                                 pitch_rate: arg.pitch_rate,
                                 int_rate: arg.int_rate,
                                 f2_rate: arg.f2_rate,
-                                f3_rate: arg.f3_rate
+                                f3_rate: arg.f3_rate,
+                                pitch_avg: arg.pitch_avg
                             });
                         } else {
                             //error on db insert
@@ -351,7 +356,8 @@ router.post('/register', function(req, res, next){
                         pitch_rate: arg.pitch_rate,
                         int_rate: arg.int_rate,
                         f2_rate: arg.f2_rate,
-                        f3_rate: arg.f3_rate
+                        f3_rate: arg.f3_rate,
+                        pitch_avg: arg.pitch_avg
                     });
                 }
             }

@@ -80,16 +80,10 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, method, callb
             var stdout_result = JSON.parse(stdout);
             var isValid = false;
 
-            console.log("compDatas stdout: ", stdout);
-
             //test standard rate = 70.0
-            if(stdout_result.pitch_rate > 80.0 
-                && stdout_result.int_rate > 80.0 
-                && stdout_result.pitch_avg > 90.0
-                && stdout_result.int_rate > 80.0
-                && stdout_result.f2_rate > 90.0
-                && stdout_result.f3_rate >90.0) {
-                    isValid = true;    
+            console.log(stdout_result);
+            if(stdout_result.data_valid == 1) {
+                isValid = true;
             }
 
             callback({
@@ -99,6 +93,7 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, method, callb
                 int_rate: stdout_result.int_rate,
                 f2_rate: stdout_result.f2_rate,
                 f3_rate: stdout_result.f3_rate,
+                pitch_avg: stdout_result.pitch_avg,
                 isValid: isValid
             });
         }
