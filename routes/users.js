@@ -244,26 +244,16 @@ router.post('/register', function(req, res, next){
                                     praatConnector.compareDatas(user_path + "/", filename1, filename2, "block_cosine", function(result){
                                         if(result.resCode === 1){
                                             if(result.isValid) {
-                                                cb(null, {
-                                                    resCode: 1,
-                                                    msg: '2good',
-                                                    pitch_rate: result.pitch_rate,
-                                                    int_rate: result.int_rate,
-                                                    f2_rate: result.f2_rate,
-                                                    f3_rate: result.f3_rate,
-                                                    pitch_avg: result.pitch_avg
-                                                });
+                                                var cb_res = result;
+                                                cb_res['resCode'] = 1;
+                                                cb_res['msg'] = '2good';
+                                                cb(null, cb_res);
                                             } else {
                                                 console.log('data2 isValid : false, values: ', result.pitch_rate, result.int_rate);
-                                                cb('err', {
-                                                    resCode: -1,
-                                                    msg: '2bad',
-                                                    pitch_rate: result.pitch_rate,
-                                                    int_rate: result.int_rate,
-                                                    f2_rate: result.f2_rate,
-                                                    f3_rate: result.f3_rate,
-                                                    pitch_avg: result.pitch_avg
-                                                });
+                                                var cb_res = result;
+                                                cb_res['resCode'] = -1;
+                                                cb_res['msg'] = '2bad';
+                                                cb('err', cb_res);
                                             }
                                         } else {
                                             console.log('data2 compareDatas() error!');
@@ -293,26 +283,16 @@ router.post('/register', function(req, res, next){
                                     praatConnector.compareDatas(user_path + "/", filename1, filename2, "block_cosine", function(result){
                                         if(result.resCode === 1){
                                             if(result.isValid) {
-                                                cb(null, {
-                                                    resCode: 1,
-                                                    msg: '3good',
-                                                    pitch_rate: result.pitch_rate,
-                                                    int_rate: result.int_rate,
-                                                    f2_rate: result.f2_rate,
-                                                    f3_rate: result.f3_rate,
-                                                    pitch_avg: result.pitch_avg
-                                                });
+                                                var cb_res = result;
+                                                cb_res['resCode'] = 1;
+                                                cb_res['msg'] = '3good';
+                                                cb(null, cb_res);
                                             } else {
                                                 console.log('data3 isValid : false, values: ', result.pitch_rate, result.int_rate);
-                                                cb('err', {
-                                                    resCode: -1,
-                                                    msg: '3bad',
-                                                    pitch_rate: result.pitch_rate,
-                                                    int_rate: result.int_rate,
-                                                    f2_rate: result.f2_rate,
-                                                    f3_rate: result.f3_rate,
-                                                    pitch_avg: result.pitch_avg
-                                                });
+                                                var cb_res = result;
+                                                cb_res['resCode'] = -1;
+                                                cb_res['msg'] = '3bad';
+                                                cb('err', cb_res);
                                             }
                                         } else {
                                             console.log('data3 compareDatas() error!');
@@ -334,15 +314,10 @@ router.post('/register', function(req, res, next){
                     //insert user
                     dbController.insertOneUser([user_path, recvData.personName, recvData.idNum],function(result){
                         if(result.resCode){
-                            cb(null, {
-                                resCode: 1,
-                                msg: "user insert success",
-                                pitch_rate: arg.pitch_rate,
-                                int_rate: arg.int_rate,
-                                f2_rate: arg.f2_rate,
-                                f3_rate: arg.f3_rate,
-                                pitch_avg: arg.pitch_avg
-                            });
+                            var cb_res = arg;
+                            cb_res['resCode'] = 1;
+                            cb_res['msg'] = 'user insert success';
+                            cb(null, cb_res);
                         } else {
                             //error on db insert
                             console.log("user insert error msg: ", result.msg);
@@ -350,15 +325,7 @@ router.post('/register', function(req, res, next){
                         }
                     });
                 } else {
-                    cb(null, {
-                        resCode: 1,
-                        msg: recvData.recNum + 'good',
-                        pitch_rate: arg.pitch_rate,
-                        int_rate: arg.int_rate,
-                        f2_rate: arg.f2_rate,
-                        f3_rate: arg.f3_rate,
-                        pitch_avg: arg.pitch_avg
-                    });
+                    cb(null, arg);
                 }
             }
         ],

@@ -85,17 +85,11 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, method, callb
             if(stdout_result.data_valid == 1) {
                 isValid = true;
             }
+            stdout_result['resCode'] = 1;
+            stdout_result['msg'] = 'exec success';
+            stdout_result['isValid'] = isValid;
 
-            callback({
-                resCode: 1,
-                msg: 'exec success',
-                pitch_rate: stdout_result.pitch_rate,
-                int_rate: stdout_result.int_rate,
-                f2_rate: stdout_result.f2_rate,
-                f3_rate: stdout_result.f3_rate,
-                pitch_avg: stdout_result.pitch_avg,
-                isValid: isValid
-            });
+            callback(stdout_result);
         }
     };
     var options = {
@@ -133,15 +127,9 @@ exports.compareDatas_attend = function(filename1, filename2, method, callback){
             var stdout_result = null;
             try{
                 stdout_result = JSON.parse(stdout);
-                callback({
-                    resCode: 1,
-                    msg: 'exec success',
-                    pitch_rate: stdout_result.pitch_rate,
-                    pitch_avg: stdout_result.pitch_avg,
-                    int_rate: stdout_result.int_rate,
-                    f2_rate: stdout_result.f2_rate,
-                    f3_rate: stdout_result.f3_rate
-                });
+                stdout_result['resCode'] = 1;
+                stdout_result['msg'] = 'exec success';
+                callback(stdout_result);
             } catch(err){
                 console.log('compareDatas_attend() err: ', err);
                 return callback({resCode: -1, msg: 'json parse err'});

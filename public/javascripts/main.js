@@ -288,14 +288,8 @@ function reqRegiResult(){
                         //data info set to div reg_corr_rate
                         //debug text data, second data information
                         $("#corr2").remove();
-                        var html_string = "<p id='corr2'>compare 1 vs 2<br/>" +
-                            "pitch rate: " + data.pitch_rate + "<br/>" +
-                            "intensity rate: " + data.int_rate +"<br/>"+
-                            "f2 rate: " + data.f2_rate + "<br/>" +
-                            "f3 rate: " + data.f3_rate + "<br/>" +
-                            "pitch avg rate: " + data.pitch_avg + "<br/>" +
-                            "</p>";
-                        $("#reg_corr_rate").append(html_string);
+                        $("#reg_graph_" + recNum).find("iframe").attr("src", "/get-graph?file=" + graph_data_string, function ( i, val ) { return val; });
+                        addDebugInfo_reg(data);
 
                     }else{ //3good
                         //set btns
@@ -312,15 +306,9 @@ function reqRegiResult(){
 
                         //debug text data, third data information
                         $("#corr3").remove();
-                        var html_string = "<p id='corr3'>compare 2 vs 3<br/>" +
-                            "pitch rate: " + data.pitch_rate + "<br/>" +
-                            "intensity rate: " + data.int_rate +"<br/>"+
-                            "f2 rate: " + data.f2_rate + "<br/>" +
-                            "f3 rate: " + data.f3_rate + "<br/>" +
-                            "pitch avg rate: " + data.pitch_avg + "<br/>" +
-                            "</p>";
-                        $("#reg_corr_rate").append(html_string);
-
+                        $("#reg_graph_" + recNum).find("iframe").attr("src", "/get-graph?file=" + graph_data_string, function ( i, val ) { return val; });
+                        //add debug info to reg corr rate
+                        addDebugInfo_reg(data);
                     }
                 } else {
                     if(data.msg.indexOf("0bad") !== -1){
@@ -346,14 +334,9 @@ function reqRegiResult(){
                         //debug graph setting
                         $("#reg_graph_" + recNum).find("iframe").attr("src", "/get-graph?file=" + graph_data_string, function ( i, val ) { return val; });
                         $('#corr' + recNum).remove();
-                        var html_string = "<p id='corr" + recNum + "'>compare" + (recNum - 1) + " vs " + (recNum) + "<br/>" +
-                            "pitch rate: " + data.pitch_rate + "<br/>" +
-                            "intensity rate: " + data.int_rate +"<br/>"+
-                            "f2 rate: " + data.f2_rate + "<br/>" +
-                            "f3 rate: " + data.f3_rate + "<br/>" +
-                            "pitch avg rate: " + data.pitch_avg + "<br/>" +
-                            "</p>";
-                        $("#reg_corr_rate").append(html_string);
+
+                        //add debug info to reg
+                        addDebugInfo_reg(data);
 
                         //set btns
                         processCheckFunction(recNum, "fail");
@@ -407,13 +390,7 @@ function checkBtn(){
                     $("#check_graph_2").find("iframe").attr("src", "/get-graph?file=" + data.newFile, function ( i, val ) { return val; });
 
                     //data info set to div check_corr_rate
-                    var html_string = "매칭률 : " + data.checkResult.comp_val + "<br/>" +
-                        "intensity rate: " + data.checkResult.int_rate + "<br/>" +
-                        "pitch rate: " + data.checkResult.pitch_rate + "<br/>" +
-                        "f2 rate: " + data.checkResult.f2_rate + "<br/>" +
-                        "f3 rate: " + data.checkResult.f3_rate + "<br/>" +
-                        "user: " + data.checkResult.user_name + "<br/>";
-                    $("#check_corr_rate").html(html_string);
+                    addDebugInfo_check("check_corr_rate", data);
 
                 }else{
                     //alert("record again please!");
@@ -426,13 +403,7 @@ function checkBtn(){
                     $("#check_graph_2").find("iframe").attr("src", "/get-graph?file=" + data.newFile, function ( i, val ) { return val; });
 
                     //data info set to div check_corr_rate
-                    var html_string = "matching rate : " + data.checkResult.comp_val + "<br/>" +
-                        "intensity rate: " + data.checkResult.int_rate + "<br/>" +
-                        "pitch rate: " + data.checkResult.pitch_rate + "<br/>" +
-                        "f2 rate: " + data.checkResult.f2_rate + "<br/>" +
-                        "f3 rate: " + data.checkResult.f3_rate + "<br/>" +
-                        "user: " + data.checkResult.user_name + "<br/>";
-                    $("#check_corr_rate").html(html_string);
+                    addDebugInfo_check("check_corr_rate", data);
                 }
             }else{
                 console.log("status fail");
@@ -480,6 +451,34 @@ function processCheckFunction(idx, state){
             $("#wave" + idx + "_s").removeClass("disabled");
         $("#wave" + idx + "_s").addClass("active");
     }
+}
+
+function addDebugInfo_check(target, data){
+    //data info set to div check_corr_rate
+    var html_string = "matching rate : " + data.checkResult.comp_val + "<br/>" +
+        "intensity rate: " + data.checkResult.int_rate + "<br/>" +
+        "pitch rate: " + data.checkResult.pitch_rate + "<br/>" +
+        "f2 rate: " + data.checkResult.f2_rate + "<br/>" +
+        "f3 rate: " + data.checkResult.f3_rate + "<br/>" +
+        "each block number: " + data.stand_block_num + " " + data.comp_block_num + "<br/>" +
+        "each block number before interp: " + data.stand_block_num_a + " " + data.comp_block_num_a + "<br/>" +
+        "pitch avg rate: " + data.pitch_avg + "<br/>" +
+        "user: " + data.checkResult.user_name + "<br/>";
+    $("#" + target).html(html_string);
+}
+
+function addDebugInfo_reg(data){
+    $('#corr' + recNum).remove();
+    var html_string = "<p id='corr" + recNum + "'>compare" + (recNum - 1) + " vs " + (recNum) + "<br/>" +
+        "pitch rate: " + data.pitch_rate + "<br/>" +
+        "intensity rate: " + data.int_rate +"<br/>"+
+        "f2 rate: " + data.f2_rate + "<br/>" +
+        "f3 rate: " + data.f3_rate + "<br/>" +
+        "each block number: " + data.stand_block_num + " " + data.comp_block_num + "<br/>" +
+        "each block number before interp: " + data.stand_block_num_a + " " + data.comp_block_num_a + "<br/>" +
+        "pitch avg rate: " + data.pitch_avg + "<br/>" +
+        "</p>";
+    $("#reg_corr_rate").append(html_string);
 }
 
 window.addEventListener('load', initAudio );
