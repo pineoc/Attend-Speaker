@@ -780,29 +780,39 @@ router.get('/user-test-roc', function(req, res){
 
 router.get('/user-test-roc-each', function(req, res){
     var recvData = req.query;
-
+    //console.log(recvData);
     var lys_t_arr = ["lys-t-1", "lys-t-2", "lys-t-3", "lys-t-4", "lys-t-5",
         "lys-t-6", "lys-t-7", "lys-t-8", "lys-t-9", "lys-t-10"];
-    var lys_f_arr = ["lys-f-1", "lys-f-2", "lys-f-3", "lys-f-4", "lys-f-5",
-        "lys-f-6", "lys-f-7", "lys-f-8", "lys-f-9", "lys-f-10"];
     var ljy_t_arr = ["ljy-t-1", "ljy-t-2", "ljy-t-3", "ljy-t-4", "ljy-t-5",
         "ljy-t-6", "ljy-t-7", "ljy-t-8", "ljy-t-9", "ljy-t-10"];
-    var ljy_f_arr = ["ljy-f-1", "ljy-f-2", "ljy-f-3", "ljy-f-4", "ljy-f-5",
-        "ljy-f-6", "ljy-f-7", "ljy-f-8", "ljy-f-9", "ljy-f-10"];
     var compare_str_arr = ["pitch_rate", "pitch_avg", "int_rate", "f2_rate", "f3_rate"];
     var stand_data_arr = [70, 80, 90];
 
 
-    testCompareDatasROC(
-        lys_t_arr[recvData.p1],
-        recvData.p2,
-        compare_str_arr[recvData.p3],
-        stand_data_arr[recvData.p4], function(result){
-            if(result.resCode==1 && result.user_name=='이윤석')
-                res.json({resCode:1});
-            else
-                res.json(result);
-    });
+    if(recvData.dataname == 'lys'){
+        testCompareDatasROC(
+            lys_t_arr[parseInt(recvData.dataidx)],
+            recvData.method,
+            compare_str_arr[parseInt(recvData.standstr)],
+            stand_data_arr[parseInt(recvData.standval)], function(result){
+                if(result.resCode==1 && result.user_name=='이윤석')
+                    res.json({resCode:1});
+                else
+                    res.json({resCode:-1});
+            });
+    } else {
+        testCompareDatasROC(
+            ljy_t_arr[parseInt(recvData.dataidx)],
+            recvData.method,
+            compare_str_arr[parseInt(recvData.standstr)],
+            stand_data_arr[parseInt(recvData.standval)], function(result){
+                if(result.resCode==1 && result.user_name=='이지윤')
+                    res.json({resCode:1});
+                else
+                    res.json({resCode:-1});
+            });
+    }
+
 });
 
 function testCompareDatasROC(data, method, comp_val, standValue, cb){
@@ -837,9 +847,11 @@ function testCompareDatasROC(data, method, comp_val, standValue, cb){
                                 corrArr.sort(function(a, b){
                                     return b.comp_val - a.comp_val;
                                 });
-                                console.log(method + " attend_name: ", corrArr[0].user_name, ", datas: ", corrArr[0]);
+                                console.log(method + " attend_name: ",
+                                    corrArr[0].user_name, ", datas: ",
+                                    corrArr[0]);
                                 if(corrArr[0].comp_val > standValue)
-                                    cb({resCode: 1, attend_name: corrArr[0].user_name, data: corrArr[0]});
+                                    cb({resCode: 1, user_name: corrArr[0].user_name, data: corrArr[0]});
                                 else
                                     cb({resCode: -1, data: corrArr[0]});
                             }

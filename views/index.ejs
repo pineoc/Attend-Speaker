@@ -1,11 +1,178 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<h1><%= title %></h1>
+<p>Welcome to <%= title %></p>
+dataname: <select id="name">
+  <option value="lys">이윤석</option>
+  <option value="ljy">이지윤</option>
+</select><br/>
+
+standStr: <select id="standstr">
+  <option value="0">pitch_rate</option>
+  <option value="1">pitch_avg</option>
+  <option value="2">int_rate</option>
+  <option value="3">f2_rate</option>
+  <option value="4">f3_rate</option>
+</select><br/>
+
+standValue: <select id="standval">
+  <option value="0">70</option>
+  <option value="1">80</option>
+  <option value="2">90</option>
+</select><br/>
+<button onclick="get_raw_test_datas()">raw</button>
+<button onclick="get_cosine_test_datas()">cosine</button>
+<button onclick="get_block_test_datas()">block-cosine</button>
+<button onclick="get_median_test_datas()">median-block-cosine</button>
+<div id="raw_test_result"></div>
+</body>
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="javascripts/jquery.min.js"></script>
+<script>
+  var test_results = [];
+  function get_raw_test_datas(){
+    var count = 0;
+    var good_count = 0;
+    var dataname = document.getElementById("name").value;
+    var standstr_idx = parseInt(document.getElementById("standstr").value);
+    var standval_idx = parseInt(document.getElementById("standval").value);
+    for(var i = 0; i < 10; i++){
+      var req_param = {
+        dataname : dataname,
+        dataidx : i,
+        method: 'raw',
+        standstr: standstr_idx,
+        standval: standval_idx
+      };
+      $.get('/users/user-test-roc-each', req_param)
+              .done(function(data){
+                if(data.resCode == 1)
+                  good_count++;
+                count++;
+                if(count == 10){
+                  var obj = {
+                    dataname : dataname,
+                    method: 'raw',
+                    standstr: standstr_idx,
+                    standval: standval_idx,
+                    rate: good_count/count
+                  };
+                  test_results.push(obj);
+                  console.log(standstr_idx, standval_idx, good_count/count, "end");
+                  $("#raw_test_result").append("<p>" + JSON.stringify(obj) + "</p>");
+                }
+              });
+    }
+  }
+  function get_cosine_test_datas(){
+    var count = 0;
+    var good_count = 0;
+    var dataname = document.getElementById("name").value;
+    var standstr_idx = parseInt(document.getElementById("standstr").value);
+    var standval_idx = parseInt(document.getElementById("standval").value);
+    for(var i = 0; i < 10; i++){
+      var req_param = {
+        dataname : dataname,
+        dataidx : i,
+        method: 'cosine',
+        standstr: standstr_idx,
+        standval: standval_idx
+      };
+      $.get('/users/user-test-roc-each', req_param)
+              .done(function(data){
+                console.log(data);
+                if(data.resCode == 1){
+                  good_count++;
+                }
+                count++;
+                if(count == 10){
+                  var obj = {
+                    dataname : dataname,
+                    method: 'cosine',
+                    standstr: standstr_idx,
+                    standval: standval_idx,
+                    rate: good_count/count
+                  };
+                  test_results.push(obj);
+                  console.log(standstr_idx, standval_idx, good_count/count, "end");
+                  $("#raw_test_result").append("<p>" + JSON.stringify(obj) + "</p>");
+                }
+              });
+    }
+  }
+  function get_block_test_datas(){
+    var count = 0;
+    var good_count = 0;
+    var dataname = document.getElementById("name").value;
+    var standstr_idx = parseInt(document.getElementById("standstr").value);
+    var standval_idx = parseInt(document.getElementById("standval").value);
+    for(var i = 0; i < 10; i++){
+      var req_param = {
+        dataname : dataname,
+        dataidx : i,
+        method: 'block_cosine',
+        standstr: standstr_idx,
+        standval: standval_idx
+      };
+      $.get('/users/user-test-roc-each', req_param)
+              .done(function(data){
+                if(data.resCode == 1)
+                  good_count++;
+                count++;
+                if(count == 10){
+                  var obj = {
+                    dataname : dataname,
+                    method: 'block_cosine',
+                    standstr: standstr_idx,
+                    standval: standval_idx,
+                    rate: good_count/count
+                  };
+                  test_results.push(obj);
+                  console.log(standstr_idx, standval_idx, good_count/count, "end");
+                  $("#raw_test_result").append("<p>" + JSON.stringify(obj) + "</p>");
+                }
+              });
+    }
+  }
+  function get_median_test_datas(){
+    var count = 0;
+    var good_count = 0;
+    var dataname = document.getElementById("name").value;
+    var standstr_idx = parseInt(document.getElementById("standstr").value);
+    var standval_idx = parseInt(document.getElementById("standval").value);
+    for(var i = 0; i < 10; i++){
+      var req_param = {
+        dataname : dataname,
+        dataidx : i,
+        method: 'median',
+        standstr: standstr_idx,
+        standval: standval_idx
+      };
+      $.get('/users/user-test-roc-each', req_param)
+              .done(function(data){
+                if(data.resCode == 1)
+                  good_count++;
+                count++;
+                if(count == 10){
+                  var obj = {
+                    dataname : dataname,
+                    method: 'median',
+                    standstr: standstr_idx,
+                    standval: standval_idx,
+                    rate: good_count/count
+                  };
+                  test_results.push(obj);
+                  console.log(standstr_idx, standval_idx, good_count/count, "end");
+                  $("#raw_test_result").append("<p>" + JSON.stringify(obj) + "</p>");
+                }
+              });
+    }
+  }
+</script>
+
 </html>
