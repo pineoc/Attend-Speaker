@@ -81,7 +81,7 @@ exports.compareDatas = function(dataDirPath, filename1, filename2, method, callb
             var isValid = false;
 
             //test standard rate = 70.0
-            console.log(stdout_result);
+            //console.log(stdout_result);
             if(stdout_result.data_valid == 1) {
                 isValid = true;
             }
