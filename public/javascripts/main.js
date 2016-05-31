@@ -460,9 +460,9 @@ function addDebugInfo_check(target, data){
         "pitch rate: " + data.checkResult.pitch_rate + "<br/>" +
         "f2 rate: " + data.checkResult.f2_rate + "<br/>" +
         "f3 rate: " + data.checkResult.f3_rate + "<br/>" +
-        "each block number: " + data.stand_block_num + " " + data.comp_block_num + "<br/>" +
-        "each block number before interp: " + data.stand_block_num_a + " " + data.comp_block_num_a + "<br/>" +
-        "pitch avg rate: " + data.pitch_avg + "<br/>" +
+        "each block number: " + data.checkResult.stand_block_num + " " + data.checkResult.comp_block_num + "<br/>" +
+        "each block number before interp: " + data.checkResult.stand_block_num_a + " " + data.checkResult.comp_block_num_a + "<br/>" +
+        "pitch avg rate: " + data.checkResult.pitch_avg + "<br/>" +
         "user: " + data.checkResult.user_name + "<br/>";
     $("#" + target).html(html_string);
 }
