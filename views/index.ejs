@@ -5,14 +5,17 @@
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 <body>
-<h1><%= title %></h1>
-<p>Welcome to <%= title %></p>
-dataname: <select id="name">
+Dataname: <select id="name">
   <option value="lys">이윤석</option>
   <option value="ljy">이지윤</option>
 </select><br/>
 
-standStr: <select id="standstr">
+testType: <select id="testType">
+  <option value="true">true</option>
+  <option value="false">false</option>
+</select><br/>
+
+StandStr: <select id="standstr">
   <option value="0">pitch_rate</option>
   <option value="1">pitch_avg</option>
   <option value="2">int_rate</option>
@@ -41,13 +44,15 @@ standValue: <select id="standval">
     var dataname = document.getElementById("name").value;
     var standstr_idx = parseInt(document.getElementById("standstr").value);
     var standval_idx = parseInt(document.getElementById("standval").value);
+    var testType = document.getElementById("testType").value;
     for(var i = 0; i < 10; i++){
       var req_param = {
         dataname : dataname,
         dataidx : i,
         method: 'raw',
         standstr: standstr_idx,
-        standval: standval_idx
+        standval: standval_idx,
+        testType: testType
       };
       $.get('/users/user-test-roc-each', req_param)
               .done(function(data){
@@ -75,13 +80,15 @@ standValue: <select id="standval">
     var dataname = document.getElementById("name").value;
     var standstr_idx = parseInt(document.getElementById("standstr").value);
     var standval_idx = parseInt(document.getElementById("standval").value);
+    var testType = document.getElementById("testType").value;
     for(var i = 0; i < 10; i++){
       var req_param = {
         dataname : dataname,
         dataidx : i,
         method: 'cosine',
         standstr: standstr_idx,
-        standval: standval_idx
+        standval: standval_idx,
+        testType: testType
       };
       $.get('/users/user-test-roc-each', req_param)
               .done(function(data){
@@ -111,13 +118,15 @@ standValue: <select id="standval">
     var dataname = document.getElementById("name").value;
     var standstr_idx = parseInt(document.getElementById("standstr").value);
     var standval_idx = parseInt(document.getElementById("standval").value);
+    var testType = document.getElementById("testType").value;
     for(var i = 0; i < 10; i++){
       var req_param = {
         dataname : dataname,
         dataidx : i,
         method: 'block_cosine',
         standstr: standstr_idx,
-        standval: standval_idx
+        standval: standval_idx,
+        testType: testType
       };
       $.get('/users/user-test-roc-each', req_param)
               .done(function(data){
@@ -145,13 +154,15 @@ standValue: <select id="standval">
     var dataname = document.getElementById("name").value;
     var standstr_idx = parseInt(document.getElementById("standstr").value);
     var standval_idx = parseInt(document.getElementById("standval").value);
+    var testType = document.getElementById("testType").value;
     for(var i = 0; i < 10; i++){
       var req_param = {
         dataname : dataname,
         dataidx : i,
         method: 'median',
         standstr: standstr_idx,
-        standval: standval_idx
+        standval: standval_idx,
+        testType: testType
       };
       $.get('/users/user-test-roc-each', req_param)
               .done(function(data){

@@ -591,6 +591,8 @@ router.get('/user-test-roc-each', function(req, res){
         "lys-t-6", "lys-t-7", "lys-t-8", "lys-t-9", "lys-t-10"];
     var ljy_t_arr = ["ljy-t-1", "ljy-t-2", "ljy-t-3", "ljy-t-4", "ljy-t-5",
         "ljy-t-6", "ljy-t-7", "ljy-t-8", "ljy-t-9", "ljy-t-10"];
+    var ljy_f_arr = ["ljy-f-1", "ljy-f-2", "ljy-f-3", "ljy-f-4", "ljy-f-5",
+        "ljy-f-6", "ljy-f-7", "ljy-f-8", "ljy-f-9", "ljy-f-10"];
     var compare_str_arr = ["pitch_rate", "pitch_avg", "int_rate", "f2_rate", "f3_rate"];
     var stand_data_arr = [70, 80, 90];
 
@@ -607,16 +609,32 @@ router.get('/user-test-roc-each', function(req, res){
                     res.json({resCode:-1});
             });
     } else {
-        testCompareDatasROC(
-            ljy_t_arr[parseInt(recvData.dataidx)],
-            recvData.method,
-            compare_str_arr[parseInt(recvData.standstr)],
-            stand_data_arr[parseInt(recvData.standval)], function(result){
-                if(result.resCode==1 && result.user_name=='이지윤')
-                    res.json({resCode:1});
-                else
-                    res.json({resCode:-1});
-            });
+        console.log('recvData testType: ', recvData.testType);
+        if(recvData.testType == "true"){
+            testCompareDatasROC(
+                ljy_t_arr[parseInt(recvData.dataidx)],
+                recvData.method,
+                compare_str_arr[parseInt(recvData.standstr)],
+                stand_data_arr[parseInt(recvData.standval)], function(result){
+                    if(result.resCode==1 && result.user_name=='이지윤')
+                        res.json({resCode:1});
+                    else
+                        res.json({resCode:-1});
+                });
+        } else {
+            testCompareDatasROC(
+                ljy_f_arr[parseInt(recvData.dataidx)],
+                recvData.method,
+                compare_str_arr[parseInt(recvData.standstr)],
+                stand_data_arr[parseInt(recvData.standval)], function(result){
+                    if(result.resCode == 1 && result.user_name == '이지윤')
+                        res.json({resCode: -1});
+                    else if(result.resCode == -1){
+                        res.json({resCode: 1});
+                    }
+                });
+        }
+
     }
 
 });
@@ -653,9 +671,7 @@ function testCompareDatasROC(data, method, comp_val, standValue, cb){
                                 corrArr.sort(function(a, b){
                                     return b.comp_val - a.comp_val;
                                 });
-                                console.log(method + " attend_name: ",
-                                    corrArr[0].user_name, ", datas: ",
-                                    corrArr[0]);
+                                console.log(method + " attend_name: ", corrArr[0].user_name);
                                 if(corrArr[0].comp_val > standValue)
                                     cb({resCode: 1, user_name: corrArr[0].user_name, data: corrArr[0]});
                                 else
