@@ -604,12 +604,11 @@ router.get('/user-test-roc-each', function(req, res){
             compare_str_arr[parseInt(recvData.standstr)],
             stand_data_arr[parseInt(recvData.standval)], function(result){
                 if(result.resCode==1 && result.user_name=='이윤석')
-                    res.json({resCode:1});
+                    res.json({resCode: 1});
                 else
-                    res.json({resCode:-1});
+                    res.json({resCode: -1});
             });
     } else {
-        console.log('recvData testType: ', recvData.testType);
         if(recvData.testType == "true"){
             testCompareDatasROC(
                 ljy_t_arr[parseInt(recvData.dataidx)],
@@ -617,11 +616,12 @@ router.get('/user-test-roc-each', function(req, res){
                 compare_str_arr[parseInt(recvData.standstr)],
                 stand_data_arr[parseInt(recvData.standval)], function(result){
                     if(result.resCode==1 && result.user_name=='이지윤')
-                        res.json({resCode:1});
+                        res.json({resCode: 1});
                     else
-                        res.json({resCode:-1});
+                        res.json({resCode: -1});
                 });
         } else {
+            //false positive & negative
             testCompareDatasROC(
                 ljy_f_arr[parseInt(recvData.dataidx)],
                 recvData.method,
@@ -629,7 +629,7 @@ router.get('/user-test-roc-each', function(req, res){
                 stand_data_arr[parseInt(recvData.standval)], function(result){
                     if(result.resCode == 1 && result.user_name == '이지윤')
                         res.json({resCode: -1});
-                    else if(result.resCode == -1){
+                    else {
                         res.json({resCode: 1});
                     }
                 });
@@ -672,10 +672,11 @@ function testCompareDatasROC(data, method, comp_val, standValue, cb){
                                     return b.comp_val - a.comp_val;
                                 });
                                 console.log(method + " attend_name: ", corrArr[0].user_name);
+                                //check settings
                                 if(corrArr[0].comp_val > standValue)
                                     cb({resCode: 1, user_name: corrArr[0].user_name, data: corrArr[0]});
                                 else
-                                    cb({resCode: -1, data: corrArr[0]});
+                                    cb({resCode: -1, user_name: corrArr[0].user_name, data: corrArr[0]});
                             }
                             else
                                 cb({resCode: -1, msg: 'dataCompare() err: ' + result.msg});
