@@ -78,20 +78,8 @@ router.post('/send-attend', function(req, res, next) {
                                 var corrObj = result;
                                 corrObj["user_idx"] = elem.user_idx;
                                 corrObj["user_name"] = elem.user_name;
-                                corrObj["comp_val"] = result.pitch_rate * 0.6 + result.int_rate * 0.4;
+                                corrObj["comp_val"] = result.pitch_rate + result.int_rate + result.pitch_avg;
                                 corrObj["data_file"] = data1;
-                                /*
-                                {
-                                    user_idx: elem.user_idx,
-                                    user_name: elem.user_name,
-                                    pitch_rate: result.pitch_rate,
-                                    int_rate: result.int_rate,
-                                    comp_val: result.pitch_rate * 0.6 + result.int_rate * 0.4,
-                                    f2_rate: result.f2_rate,
-                                    f3_rate: result.f3_rate,
-                                    data_file: data1
-                                };
-                                */
                                 corrArr.push(corrObj);
                                 dataCnt--;
 
@@ -122,14 +110,18 @@ router.post('/send-attend', function(req, res, next) {
                 return b.comp_val - a.comp_val;
             });
 
-            //console.log('dataArr: ', dataArr);
+            console.log('dataArr: ', dataArr);
             console.log('attend person: ', dataArr[0]);
 
             var newFile_name = arg.newFile;
             newFile_name = newFile_name.substring(__dirname.length + 14);
             dataArr[0].data_file = dataArr[0].data_file.substring(__dirname.length + 14);
             //if comp_val is 90 point, success
-            if(dataArr[0].comp_val > 80.0)
+            if(dataArr[0].pitch_rate > 80.0 &&
+                dataArr[0].pitch_avg > 80.0 &&
+                dataArr[0].int_rate > 80.0 &&
+                dataArr[0].f2_rate > 80.0 &&
+                dataArr[0].f3_rate > 80.0)
                 cb(null, {
                     resCode: 1,
                     checkResult: dataArr[0],
@@ -357,233 +349,6 @@ router.post('/register', function(req, res, next){
 * test for ROC
 *
 * */
-router.get('/user-test-roc', function(req, res){
-    var lys_t_arr = ["lys-t-1", "lys-t-2", "lys-t-3", "lys-t-4", "lys-t-5",
-        "lys-t-6", "lys-t-7", "lys-t-8", "lys-t-9", "lys-t-10"];
-    var lys_f_arr = ["lys-f-1", "lys-f-2", "lys-f-3", "lys-f-4", "lys-f-5",
-        "lys-f-6", "lys-f-7", "lys-f-8", "lys-f-9", "lys-f-10"];
-    var ljy_t_arr = ["ljy-t-1", "ljy-t-2", "ljy-t-3", "ljy-t-4", "ljy-t-5",
-        "ljy-t-6", "ljy-t-7", "ljy-t-8", "ljy-t-9", "ljy-t-10"];
-    var ljy_f_arr = ["ljy-f-1", "ljy-f-2", "ljy-f-3", "ljy-f-4", "ljy-f-5",
-        "ljy-f-6", "ljy-f-7", "ljy-f-8", "ljy-f-9", "ljy-f-10"];
-    var compare_str_arr = ["pitch_rate", "pitch_avg", "int_rate", "f2_rate", "f3_rate"];
-    var stand_data_arr = [70, 80, 90];
-
-    var raw_result = {}; //if done, size=300
-    var cosine_result = {};
-    var block_cosine_result = {};
-    var median_result = {};
-
-    for(var i=0; i<5;i++){
-        for(var j=0;j<3;j++){
-            raw_result[compare_str_arr[i]+stand_data_arr[j]] = new Array();
-            cosine_result[compare_str_arr[i]+stand_data_arr[j]] = new Array();
-            block_cosine_result[compare_str_arr[i]+stand_data_arr[j]] = new Array();
-            median_result[compare_str_arr[i]+stand_data_arr[j]] = new Array();
-        }
-    }
-
-    async.waterfall([
-        function(cb){
-            //raw
-            var count = 300;
-
-            //비교대상, pitch_rate, int_rate, ...
-            for(var i = 0; i < 5; i++){
-                //기준, 70, 80, 90
-                for(var j = 0; j < 3; j++){
-                    //lys-t-arr
-                    //raw_result[compare_str_arr[i] + stand_data_arr[j]] = new Array();
-                    for(var k = 0; k < 10; k++){
-                        testCompareDatasROC(lys_t_arr[k], "raw", compare_str_arr[i], stand_data_arr[j],function(result){
-                            if(result.resCode === 1 && result.user_name == "이윤석"){
-                                raw_result[compare_str_arr[i]+stand_data_arr[j]].push(1);
-                            } else {
-                                raw_result[compare_str_arr[i]+stand_data_arr[j]].push(0);
-                            }
-                            count--;
-                            if(count==0){
-                                console.log('raw test end');
-                                cb(null);
-                            }
-                        });
-                    }
-                }
-            }
-            //비교대상, pitch_rate, int_rate, ...
-            for(var i=0; i < 5; i++){
-                //기준, 70, 80, 90
-                for(var j = 0; j < 3; j++){
-                    //lys-t-arr
-                    for(var k = 0; k < 10; k++){
-                        testCompareDatasROC(ljy_t_arr[k], "raw", compare_str_arr[i], stand_data_arr[j], function(result){
-                            if(result.resCode === 1 && result.user_name == "이지윤"){
-                                raw_result[compare_str_arr[i]+stand_data_arr[j]].push(1);
-                            } else {
-                                raw_result[compare_str_arr[i]+stand_data_arr[j]].push(0);
-                            }
-                            count--;
-                            if(count==0){
-                                console.log('raw test end');
-                                cb(null);
-                            }
-                        });
-                    }
-                }
-            }
-        }, function(cb){
-            //cosine
-            var count = 300;
-            //비교대상, pitch_rate, int_rate, ...
-            for(var i = 0; i < 5; i++){
-                //기준, 70, 80, 90
-                for(var j = 0; j < 3; j++){
-                    //lys-t-arr
-                    for(var k = 0; k < 10; k++){
-                        testCompareDatasROC(lys_t_arr[k], "cosine", compare_str_arr[i], stand_data_arr[j],function(result){
-                            if(result.resCode === 1 && result.user_name == "이윤석"){
-                                cosine_result[compare_str_arr[i]+stand_data_arr[j]].push(1);
-                            } else {
-                                cosine_result[compare_str_arr[i]+stand_data_arr[j]].push(0);
-                            }
-                            count--;
-                            if(count==0){
-                                console.log('cosine test end');
-                                cb(null);
-                            }
-                        });
-                    }
-                }
-            }
-            //비교대상, pitch_rate, int_rate, ...
-            for(var i=0; i < 5; i++){
-                //기준, 70, 80, 90
-                for(var j = 0; j < 3; j++){
-                    //lys-t-arr
-                    for(var k = 0; k < 10; k++){
-                        testCompareDatasROC(ljy_t_arr[k], "cosine", compare_str_arr[i], stand_data_arr[j],function(result){
-                            if(result.resCode === 1 && result.user_name == "이지윤"){
-                                cosine_result[compare_str_arr[i]+stand_data_arr[j]].push(1);
-                            } else {
-                                cosine_result[compare_str_arr[i]+stand_data_arr[j]].push(0);
-                            }
-                            count--;
-                            if(count==0){
-                                console.log('cosine test end');
-                                cb(null);
-                            }
-                        });
-                    }
-                }
-            }
-        }, function(cb){
-            //block
-            var count = 300;
-            //비교대상, pitch_rate, int_rate, ...
-            for(var i = 0; i < 5; i++){
-                //기준, 70, 80, 90
-                for(var j = 0; j < 3; j++){
-                    //lys-t-arr
-                    for(var k = 0; k < 10; k++){
-                        testCompareDatasROC(lys_t_arr[k], "block_cosine", compare_str_arr[i], stand_data_arr[j],function(result){
-                            if(result.resCode === 1 && result.user_name == "이윤석"){
-                                block_cosine_result[compare_str_arr[i]+stand_data_arr[j]].push(1);
-                            } else {
-                                block_cosine_result[compare_str_arr[i]+stand_data_arr[j]].push(0);
-                            }
-                            count--;
-                            if(count==0){
-                                console.log('block test end');
-                                cb(null);
-                            }
-                        });
-                    }
-                }
-            }
-            //비교대상, pitch_rate, int_rate, ...
-            for(var i=0; i < 5; i++){
-                //기준, 70, 80, 90
-                for(var j = 0; j < 3; j++){
-                    //lys-t-arr
-                    for(var k = 0; k < 10; k++){
-                        testCompareDatasROC(ljy_t_arr[k], "block_cosine", compare_str_arr[i], stand_data_arr[j],function(result){
-                            if(result.resCode === 1 && result.user_name == "이지윤"){
-                                block_cosine_result[compare_str_arr[i]+stand_data_arr[j]].push(1);
-                            } else {
-                                block_cosine_result[compare_str_arr[i]+stand_data_arr[j]].push(0);
-                            }
-                            count--;
-                            if(count==0){
-                                console.log('block test end');
-                                cb(null);
-                            }
-                        });
-                    }
-                }
-            }
-        }, function(cb){
-            //block+median
-            var count = 300;
-            //비교대상, pitch_rate, int_rate, ...
-            for(var i = 0; i < 5; i++){
-                //기준, 70, 80, 90
-                for(var j = 0; j < 3; j++){
-                    //lys-t-arr
-                    for(var k = 0; k < 10; k++){
-                        testCompareDatasROC(lys_t_arr[k], "median", compare_str_arr[i], stand_data_arr[j],function(result){
-                            if(result.resCode === 1 && result.user_name == "이윤석"){
-                                median_result[compare_str_arr[i]+stand_data_arr[j]].push(1);
-                            } else {
-                                median_result[compare_str_arr[i]+stand_data_arr[j]].push(0);
-                            }
-                            count--;
-                            if(count==0){
-                                console.log('median block test end');
-                                cb(null);
-                            }
-                        });
-                    }
-                }
-            }
-            //비교대상, pitch_rate, int_rate, ...
-            for(var i=0; i < 5; i++){
-                //기준, 70, 80, 90
-                for(var j = 0; j < 3; j++){
-                    //lys-t-arr
-                    for(var k = 0; k < 10; k++){
-                        testCompareDatasROC(ljy_t_arr[k], "median", compare_str_arr[i], stand_data_arr[j],function(result){
-                            if(result.resCode === 1 && result.user_name == "이지윤"){
-                                median_result[compare_str_arr[i]+stand_data_arr[j]].push(1);
-                            } else {
-                                median_result[compare_str_arr[i]+stand_data_arr[j]].push(0);
-                            }
-                            count--;
-                            if(count==0){
-                                console.log('median block test end');
-                                cb(null);
-                            }
-                        });
-                    }
-                }
-            }
-        }
-    ],function(err,result){
-        if(err){
-            console.log('roc error on waterfall ', err);
-            res.json({result:'err', msg: err});
-        } else {
-            res.json({
-                result: 'success',
-                raw_result: raw_result,
-                cosine_result: cosine_result,
-                block_result: block_cosine_result,
-                median_result: median_result
-            });
-        }
-    });
-
-});
-
 router.get('/user-test-roc-each', function(req, res){
     var recvData = req.query;
     //console.log(recvData);
